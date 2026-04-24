@@ -1,0 +1,225 @@
+{
+  "users": [
+    {
+      "id": "USR-1001",
+      "name": "Alice Miller",
+      "email": "alice.miller@example.com",
+      "role": "admin",
+      "status": "active",
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=USR-1001",
+      "createdAt": "2024-01-15T09:00:00.000Z",
+      "linkedEntities": [
+        {
+          "id": "USR-1001-ENT-1",
+          "entity": "Google Cloud Project Alpha",
+          "email": "alice.gcp@example.com",
+          "usageQueries": 1250,
+          "lastActive": "1 hr ago"
+        },
+        {
+          "id": "USR-1001-ENT-2",
+          "entity": "Slack Workspace Marketing",
+          "email": "alice.slack@example.com",
+          "usageQueries": 4300,
+          "lastActive": "2 hrs ago"
+        }
+      ]
+    },
+    {
+      "id": "USR-1002",
+      "name": "John Peterson",
+      "email": "john.peterson@example.com",
+      "role": "moderator",
+      "status": "inactive",
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=USR-1002",
+      "createdAt": "2024-02-03T09:00:00.000Z",
+      "linkedEntities": [
+        {
+          "id": "USR-1002-ENT-1",
+          "entity": "Notion Workspace Product",
+          "email": "john.notion@example.com",
+          "usageQueries": 890,
+          "lastActive": "1 day ago"
+        }
+      ]
+    },
+    {
+      "id": "USR-1003",
+      "name": "Sara Coleman",
+      "email": "sara.coleman@example.com",
+      "role": "user",
+      "status": "banned",
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=USR-1003",
+      "createdAt": "2024-02-18T09:00:00.000Z",
+      "linkedEntities": []
+    },
+    {
+      "id": "USR-1004",
+      "name": "Mohamed Hassan",
+      "email": "mohamed.hassan@example.com",
+      "role": "admin",
+      "status": "active",
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=USR-1004",
+      "createdAt": "2024-03-05T09:00:00.000Z",
+      "linkedEntities": [
+        {
+          "id": "USR-1004-ENT-1",
+          "entity": "AWS Account Production",
+          "email": "mohamed.aws@example.com",
+          "usageQueries": 6780,
+          "lastActive": "Just now"
+        },
+        {
+          "id": "USR-1004-ENT-2",
+          "entity": "Jira Project Backend",
+          "email": "mohamed.jira@example.com",
+          "usageQueries": 2140,
+          "lastActive": "30 mins ago"
+        }
+      ]
+    },
+    {
+      "id": "USR-1005",
+      "name": "Emily Brown",
+      "email": "emily.brown@example.com",
+      "role": "moderator",
+      "status": "active",
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=USR-1005",
+      "createdAt": "2024-03-22T09:00:00.000Z",
+      "linkedEntities": [
+        {
+          "id": "USR-1005-ENT-1",
+          "entity": "Figma Team Design",
+          "email": "emily.figma@example.com",
+          "usageQueries": 1540,
+          "lastActive": "3 hrs ago"
+        }
+      ]
+    },
+    {
+      "id": "USR-1006",
+      "name": "David Green",
+      "email": "david.green@example.com",
+      "role": "user",
+      "status": "inactive",
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=USR-1006",
+      "createdAt": "2024-04-10T09:00:00.000Z",
+      "linkedEntities": [
+        {
+          "id": "USR-1006-ENT-1",
+          "entity": "GitHub Organization Dev",
+          "email": "david.github@example.com",
+          "usageQueries": 980,
+          "lastActive": "2 days ago"
+        }
+      ]
+    },
+    {
+      "id": "USR-1007",
+      "name": "Nora Ali",
+      "email": "nora.ali@example.com",
+      "role": "admin",
+      "status": "active",
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=USR-1007",
+      "createdAt": "2024-04-25T09:00:00.000Z",
+      "linkedEntities": [
+        {
+          "id": "USR-1007-ENT-1",
+          "entity": "Internal Tool CMS",
+          "email": "nora.cms@example.com",
+          "usageQueries": 3210,
+          "lastActive": "5 hrs ago"
+        },
+        {
+          "id": "USR-1007-ENT-2",
+          "entity": "Analytics Workspace",
+          "email": "nora.analytics@example.com",
+          "usageQueries": 1875,
+          "lastActive": "1 day ago"
+        }
+      ]
+    },
+    {
+      "id": "USR-1008",
+      "name": "Kevin Lopez",
+      "email": "kevin.lopez@example.com",
+      "role": "moderator",
+      "status": "banned",
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=USR-1008",
+      "createdAt": "2024-05-08T09:00:00.000Z",
+      "linkedEntities": []
+    },
+    {
+      "id": "USR-1009",
+      "name": "Fatima Noor",
+      "email": "fatima.noor@example.com",
+      "role": "user",
+      "status": "active",
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=USR-1009",
+      "createdAt": "2024-05-24T09:00:00.000Z",
+      "linkedEntities": [
+        {
+          "id": "USR-1009-ENT-1",
+          "entity": "Customer Portal Beta",
+          "email": "fatima.portal@example.com",
+          "usageQueries": 1120,
+          "lastActive": "2 hrs ago"
+        }
+      ]
+    },
+    {
+      "id": "USR-1010",
+      "name": "Chris Evans",
+      "email": "chris.evans@example.com",
+      "role": "admin",
+      "status": "inactive",
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=USR-1010",
+      "createdAt": "2024-06-11T09:00:00.000Z",
+      "linkedEntities": [
+        {
+          "id": "USR-1010-ENT-1",
+          "entity": "Billing Dashboard",
+          "email": "chris.billing@example.com",
+          "usageQueries": 740,
+          "lastActive": "3 days ago"
+        }
+      ]
+    },
+    {
+      "id": "USR-1011",
+      "name": "Lina Ahmed",
+      "email": "lina.ahmed@example.com",
+      "role": "moderator",
+      "status": "active",
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=USR-1011",
+      "createdAt": "2024-06-27T09:00:00.000Z",
+      "linkedEntities": [
+        {
+          "id": "USR-1011-ENT-1",
+          "entity": "CRM Workspace",
+          "email": "lina.crm@example.com",
+          "usageQueries": 2650,
+          "lastActive": "4 hrs ago"
+        }
+      ]
+    },
+    {
+      "id": "USR-1012",
+      "name": "Omar Khaled",
+      "email": "omar.khaled@example.com",
+      "role": "user",
+      "status": "active",
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=USR-1012",
+      "createdAt": "2024-07-15T09:00:00.000Z",
+      "linkedEntities": [
+        {
+          "id": "USR-1012-ENT-1",
+          "entity": "Support Queue Ops",
+          "email": "omar.support@example.com",
+          "usageQueries": 530,
+          "lastActive": "6 hrs ago"
+        }
+      ]
+    }
+  ]
+}

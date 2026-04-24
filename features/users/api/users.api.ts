@@ -1,82 +1,62 @@
-import type { UsersParams, UsersResponse, User } from "../types/user.types";
-import type { UserRole, UserStatus } from "../types/user.types";
+import type {
+     CreateUserInput,
+     UsersParams,
+     UsersResponse,
+     User,
+} from "../types/user.types";
 
-// We fetch real users from JSONPlaceholder and enrich them locally
-const BASE_URL = "https://jsonplaceholder.typicode.com";
+function buildQuery(params: UsersParams) {
+     const searchParams = new URLSearchParams({
+          page: String(params.page),
+          perPage: String(params.perPage),
+     });
 
-const ROLES: UserRole[] = ["admin", "moderator", "user"];
-const STATUSES: UserStatus[] = ["active", "inactive", "banned"];
-const AVATARS = (id: number) =>
-     `https://api.dicebear.com/7.x/avataaars/svg?seed=${id}`;
+     if (params.search) searchParams.set("search", params.search);
+     if (params.role) searchParams.set("role", params.role);
+     if (params.status) searchParams.set("status", params.status);
 
-// Deterministic enrichment so data is stable across calls
-function enrichUser(raw: { id: number; name: string; email: string }): User {
-     return {
-          id: String(raw.id),
-          name: raw.name,
-          email: raw.email,
-          role: ROLES[raw.id % ROLES.length],
-          status: STATUSES[raw.id % STATUSES.length],
-          avatar: AVATARS(raw.id),
-          createdAt: new Date(
-               Date.now() - raw.id * 1000 * 60 * 60 * 24 * 10
-          ).toISOString(),
-     };
-}
-
-// Cache the full list so we don't re-fetch on every param change
-let cachedUsers: User[] | null = null;
-
-async function getAllUsers(): Promise<User[]> {
-     if (cachedUsers) return cachedUsers;
-
-     const res = await fetch(`${BASE_URL}/users`);
-     if (!res.ok) throw new Error("Failed to fetch users");
-
-     const raw: { id: number; name: string; email: string }[] = await res.json();
-     cachedUsers = raw.map(enrichUser);
-     return cachedUsers;
+     return searchParams.toString();
 }
 
 export async function fetchUsers(params: UsersParams): Promise<UsersResponse> {
-     const { page, perPage, search, role, status } = params;
+     const res = await fetch(`/api/users?${buildQuery(params)}`);
+     if (!res.ok) throw new Error("Failed to fetch users");
 
-     const all = await getAllUsers();
+     return res.json();
+}
 
-     // Apply filters
-     const filtered = all.filter((u) => {
-          const matchSearch = search
-               ? u.name.toLowerCase().includes(search.toLowerCase()) ||
-               u.email.toLowerCase().includes(search.toLowerCase())
-               : true;
-          const matchRole = role ? u.role === role : true;
-          const matchStatus = status ? u.status === status : true;
-          return matchSearch && matchRole && matchStatus;
+export async function createUser(payload: CreateUserInput): Promise<User> {
+     const res = await fetch("/api/users", {
+          method: "POST",
+          headers: {
+               "Content-Type": "application/json",
+          },
+          body: JSON.stringify(payload),
      });
+     if (!res.ok) throw new Error("Failed to create user");
 
-     // Apply pagination
-     const start = (page - 1) * perPage;
-     const end = start + perPage;
-     const paginated = filtered.slice(start, end);
+     return res.json();
+}
 
-     return {
-          data: paginated,
-          total: filtered.length,
-          page,
-          perPage,
-          totalPages: Math.ceil(filtered.length / perPage),
-     };
+export async function updateUser(
+     id: string,
+     payload: Partial<CreateUserInput>
+): Promise<User> {
+     const res = await fetch(`/api/users/${id}`, {
+          method: "PATCH",
+          headers: {
+               "Content-Type": "application/json",
+          },
+          body: JSON.stringify(payload),
+     });
+     if (!res.ok) throw new Error("Failed to update user");
+
+     return res.json();
 }
 
 export async function deleteUser(id: string): Promise<void> {
-     // JSONPlaceholder accepts DELETE but doesn't actually remove
-     const res = await fetch(`${BASE_URL}/users/${id}`, {
+     const res = await fetch(`/api/users/${id}`, {
           method: "DELETE",
      });
      if (!res.ok) throw new Error("Failed to delete user");
-
-     // Remove from cache to simulate deletion
-     if (cachedUsers) {
-          cachedUsers = cachedUsers.filter((u) => u.id !== id);
-     }
 }
