@@ -42,6 +42,17 @@
       "inactive": "Inactive",
       "banned": "Banned"
     },
+    "modes": {
+      "selectable": "Selectable Table",
+      "expandable": "Expandable Table"
+    },
+    "expanded": {
+      "linkedEntities": "Linked Entities",
+      "linkedEmails": "Linked Emails",
+      "usageQueries": "Usage (Queries)",
+      "lastActive": "Last Active in Entity",
+      "noEntities": "No linked entities found"
+    },
     "actions": {
       "editUser": "Edit user",
       "deleteUser": "Delete user",

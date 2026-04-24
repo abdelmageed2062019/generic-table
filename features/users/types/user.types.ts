@@ -26,3 +26,11 @@ export interface UsersParams {
      role?: UserRole | "";
      status?: UserStatus | "";
 }
+
+export interface LinkedEntity {
+     id: string;
+     entity: string;
+     email: string;
+     usageQueries: number;
+     lastActive: string;
+}

@@ -1,227 +1,274 @@
 "use client";
 
 import { useState } from "react";
-import { useLocale, useTranslations } from "next-intl";
-
+import { ColumnDef, RowSelectionState, ExpandedState } from "@tanstack/react-table";
+import { useTranslations } from "next-intl";
+import { ChevronDown, ChevronRight } from "lucide-react";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { useDeleteUser, useUsers } from "../hooks/useUsers";
-import type { User, UserRole, UserStatus } from "../types/user.types";
-import { UserRowActions } from "./UserRowActions";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { DataTable, DataTableColumnHeader } from "@/components/data-table";
 import { UsersFilters } from "./UsersFilters";
+import { UserRowActions } from "./UserRowActions";
+import { UserExpandedRow } from "./UserExpandedRow";
+import { useUsers } from "../hooks/useUsers";
+import type { User, UserRole, UserStatus } from "../types/user.types";
 
-const PER_PAGE = 5;
-
-function formatDate(value: string, locale: string) {
-     return new Intl.DateTimeFormat(locale, {
-          dateStyle: "medium",
-     }).format(new Date(value));
-}
-
-function getStatusClasses(status: UserStatus) {
-     switch (status) {
-          case "active":
-               return "bg-emerald-100 text-emerald-700";
-          case "inactive":
-               return "bg-zinc-100 text-zinc-700";
-          case "banned":
-               return "bg-rose-100 text-rose-700";
-     }
-}
+const statusVariant: Record<UserStatus, "default" | "secondary" | "destructive"> = {
+     active: "default",
+     inactive: "secondary",
+     banned: "destructive",
+};
 
 export function UsersTable() {
      const t = useTranslations("users");
      const tCommon = useTranslations("common");
-     const tPagination = useTranslations("pagination");
-     const locale = useLocale();
-     const [page, setPage] = useState(1);
+     const [tableMode, setTableMode] = useState<"selection" | "expandable">(
+          "selection"
+     );
+
+     const [pagination, setPagination] = useState({ pageIndex: 0, pageSize: 10 });
      const [search, setSearch] = useState("");
      const [role, setRole] = useState<UserRole | "">("");
      const [status, setStatus] = useState<UserStatus | "">("");
+     const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
+     const [expanded, setExpanded] = useState<ExpandedState>({});
 
-     const usersQuery = useUsers({
-          page,
-          perPage: PER_PAGE,
+     const { data, isLoading } = useUsers({
+          page: pagination.pageIndex + 1,
+          perPage: pagination.pageSize,
           search,
           role,
           status,
      });
-     const deleteUserMutation = useDeleteUser();
 
-     const users = usersQuery.data?.data ?? [];
-     const totalPages = usersQuery.data?.totalPages ?? 1;
-
-     function handleReset() {
-          setSearch("");
+     const handleReset = () => {
           setRole("");
           setStatus("");
-          setPage(1);
-     }
+          setSearch("");
+          setPagination((prev) => ({ ...prev, pageIndex: 0 }));
+     };
 
-     function handleRoleChange(value: UserRole | "") {
-          setRole(value);
-          setPage(1);
-     }
-
-     function handleStatusChange(value: UserStatus | "") {
-          setStatus(value);
-          setPage(1);
-     }
-
-     async function handleDeleteUser(user: User) {
-          const confirmed = window.confirm(`${t("actions.deleteUser")}: ${user.name}?`);
-          if (!confirmed) return;
-
-          await deleteUserMutation.mutateAsync(user.id);
-     }
-
-     function handleViewProfile(user: User) {
-          window.alert(`${t("actions.viewProfile")}: ${user.name}`);
-     }
-
-     function handleEditUser(user: User) {
-          window.alert(`${t("actions.editUser")}: ${user.name}`);
-     }
-
-     return (
-          <section className="space-y-6">
-               <div className="space-y-1">
-                    <h1 className="text-2xl font-semibold">{t("title")}</h1>
-                    <p className="text-sm text-muted-foreground">{t("description")}</p>
-               </div>
-
-               <div className="flex flex-col gap-3 rounded-lg border bg-card p-4">
-                    <input
-                         value={search}
-                         onChange={(event) => {
-                              setSearch(event.target.value);
-                              setPage(1);
-                         }}
-                         placeholder={tCommon("search")}
-                         className="h-9 rounded-md border border-input bg-background px-3 text-sm outline-hidden focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/50"
-                    />
-                    <UsersFilters
-                         role={role}
-                         status={status}
-                         onRoleChange={handleRoleChange}
-                         onStatusChange={handleStatusChange}
-                         onReset={handleReset}
-                    />
-               </div>
-
-               <div className="overflow-hidden rounded-lg border bg-card">
-                    <div className="overflow-x-auto">
-                         <table className="min-w-full text-sm">
-                              <thead className="bg-muted/50 text-left">
-                                   <tr>
-                                        <th className="px-4 py-3 font-medium">
-                                             {t("columns.name")}
-                                        </th>
-                                        <th className="px-4 py-3 font-medium">
-                                             {t("columns.email")}
-                                        </th>
-                                        <th className="px-4 py-3 font-medium">
-                                             {t("columns.role")}
-                                        </th>
-                                        <th className="px-4 py-3 font-medium">
-                                             {t("columns.status")}
-                                        </th>
-                                        <th className="px-4 py-3 font-medium">
-                                             {t("columns.createdAt")}
-                                        </th>
-                                        <th className="px-4 py-3 font-medium text-right">
-                                             {tCommon("actions")}
-                                        </th>
-                                   </tr>
-                              </thead>
-                              <tbody>
-                                   {usersQuery.isLoading && (
-                                        <tr>
-                                             <td
-                                                  colSpan={6}
-                                                  className="px-4 py-8 text-center text-muted-foreground"
-                                             >
-                                                  {tCommon("loading")}
-                                             </td>
-                                        </tr>
-                                   )}
-
-                                   {!usersQuery.isLoading && users.length === 0 && (
-                                        <tr>
-                                             <td
-                                                  colSpan={6}
-                                                  className="px-4 py-8 text-center text-muted-foreground"
-                                             >
-                                                  {tCommon("noResults")}
-                                             </td>
-                                        </tr>
-                                   )}
-
-                                   {users.map((user) => (
-                                        <tr key={user.id} className="border-t">
-                                             <td className="px-4 py-3 font-medium">{user.name}</td>
-                                             <td className="px-4 py-3 text-muted-foreground">
-                                                  {user.email}
-                                             </td>
-                                             <td className="px-4 py-3">
-                                                  {t(`filters.${user.role}`)}
-                                             </td>
-                                             <td className="px-4 py-3">
-                                                  <span
-                                                       className={`inline-flex rounded-full px-2 py-1 text-xs font-medium ${getStatusClasses(user.status)}`}
-                                                  >
-                                                       {t(`filters.${user.status}`)}
-                                                  </span>
-                                             </td>
-                                             <td className="px-4 py-3 text-muted-foreground">
-                                                  {formatDate(user.createdAt, locale)}
-                                             </td>
-                                             <td className="px-4 py-3 text-right">
-                                                  <UserRowActions
-                                                       user={user}
-                                                       onViewProfile={handleViewProfile}
-                                                       onEditUser={handleEditUser}
-                                                       onDeleteUser={handleDeleteUser}
-                                                  />
-                                             </td>
-                                        </tr>
-                                   ))}
-                              </tbody>
-                         </table>
-                    </div>
-
-                    <div className="flex items-center justify-between border-t px-4 py-3">
-                         <p className="text-sm text-muted-foreground">
-                              {tCommon("selected", {
-                                   count: users.length,
-                                   total: usersQuery.data?.total ?? 0,
-                              })}
-                         </p>
-                         <div className="flex items-center gap-2">
-                              <Button
-                                   variant="outline"
-                                   size="sm"
-                                   onClick={() => setPage((current) => Math.max(1, current - 1))}
-                                   disabled={page === 1 || usersQuery.isFetching}
-                              >
-                                   {tPagination("previous")}
-                              </Button>
-                              <span className="text-sm text-muted-foreground">
-                                   {tPagination("page")} {page} {tPagination("of")}{" "}
-                                   {totalPages}
+     const baseColumns: ColumnDef<User>[] = [
+          {
+               id: "name",
+               accessorKey: "name",
+               header: ({ column }) => (
+                    <DataTableColumnHeader column={column} title={t("columns.name")} />
+               ),
+               cell: ({ row }) => (
+                    <div className="flex items-center gap-3">
+                         <img
+                              src={row.original.avatar}
+                              alt={row.original.name}
+                              className="h-8 w-8 rounded-full bg-muted"
+                         />
+                         <div className="flex flex-col">
+                              <span className="font-medium text-sm">{row.original.name}</span>
+                              <span className="text-xs text-muted-foreground">
+                                   {row.original.email}
                               </span>
-                              <Button
-                                   variant="outline"
-                                   size="sm"
-                                   onClick={() =>
-                                        setPage((current) => Math.min(totalPages, current + 1))
-                                   }
-                                   disabled={page >= totalPages || usersQuery.isFetching}
-                              >
-                                   {tPagination("next")}
-                              </Button>
                          </div>
                     </div>
+               ),
+          },
+
+          // Role
+          {
+               id: "role",
+               accessorKey: "role",
+               header: ({ column }) => (
+                    <DataTableColumnHeader column={column} title={t("columns.role")} />
+               ),
+               cell: ({ row }) => (
+                    <Badge variant="outline" className="capitalize">
+                         {t(`filters.${row.original.role}`)}
+                    </Badge>
+               ),
+          },
+
+          // Status
+          {
+               id: "status",
+               accessorKey: "status",
+               header: ({ column }) => (
+                    <DataTableColumnHeader column={column} title={t("columns.status")} />
+               ),
+               cell: ({ row }) => (
+                    <Badge variant={statusVariant[row.original.status]} className="capitalize">
+                         {t(`filters.${row.original.status}`)}
+                    </Badge>
+               ),
+          },
+
+          // Created At
+          {
+               id: "createdAt",
+               accessorKey: "createdAt",
+               header: ({ column }) => (
+                    <DataTableColumnHeader column={column} title={t("columns.createdAt")} />
+               ),
+               cell: ({ row }) => (
+                    <span className="text-sm text-muted-foreground">
+                         {new Date(row.original.createdAt).toLocaleDateString()}
+                    </span>
+               ),
+          },
+
+          // Actions
+          {
+               id: "actions",
+               cell: ({ row }) => <UserRowActions row={row} />,
+               size: 40,
+          },
+     ];
+
+     const selectionColumns: ColumnDef<User>[] = [
+          {
+               id: "select",
+               header: ({ table }) => (
+                    <Checkbox
+                         checked={
+                              table.getIsAllPageRowsSelected() ||
+                              (table.getIsSomePageRowsSelected() && "indeterminate")
+                         }
+                         onCheckedChange={(val) => table.toggleAllPageRowsSelected(!!val)}
+                         aria-label="Select all"
+                    />
+               ),
+               cell: ({ row }) => (
+                    <Checkbox
+                         checked={row.getIsSelected()}
+                         onCheckedChange={(val) => row.toggleSelected(!!val)}
+                         aria-label="Select row"
+                    />
+               ),
+               enableSorting: false,
+               enableHiding: false,
+               size: 40,
+          },
+          ...baseColumns,
+     ];
+
+     const expandableColumns: ColumnDef<User>[] = [
+          {
+               id: "expand",
+               header: () => null,
+               cell: ({ row }) => (
+                    <Button
+                         variant="ghost"
+                         size="sm"
+                         className="h-8 w-8 p-0"
+                         onClick={() => row.toggleExpanded()}
+                         aria-label="Toggle expanded row"
+                    >
+                         {row.getIsExpanded() ? (
+                              <ChevronDown className="h-4 w-4" />
+                         ) : (
+                              <ChevronRight className="h-4 w-4" />
+                         )}
+                    </Button>
+               ),
+               enableSorting: false,
+               enableHiding: false,
+               size: 40,
+          },
+          ...baseColumns,
+     ];
+
+     const activeColumns =
+          tableMode === "selection" ? selectionColumns : expandableColumns;
+
+     const sharedTableProps = {
+          data: data?.data ?? [],
+          total: data?.total ?? 0,
+          isLoading,
+          search,
+          onSearchChange: (val: string) => {
+               setSearch(val);
+               setPagination((prev) => ({ ...prev, pageIndex: 0 }));
+          },
+          filterSlot: (
+               <UsersFilters
+                    role={role}
+                    status={status}
+                    onRoleChange={(val) => {
+                         setRole(val);
+                         setPagination((prev) => ({ ...prev, pageIndex: 0 }));
+                    }}
+                    onStatusChange={(val) => {
+                         setStatus(val);
+                         setPagination((prev) => ({ ...prev, pageIndex: 0 }));
+                    }}
+                    onReset={handleReset}
+               />
+          ),
+          pagination,
+          onPaginationChange: setPagination,
+          getRowId: (row: User) => row.id,
+     };
+
+     return (
+          <div className="space-y-4">
+               <div>
+                    <h1 className="text-2xl font-semibold">{t("title")}</h1>
+                    <p className="text-muted-foreground text-sm">{t("description")}</p>
                </div>
-          </section>
+
+               {tableMode === "selection" && Object.keys(rowSelection).length > 0 && (
+                    <div className="flex items-center gap-2 rounded-md bg-muted px-4 py-2 text-sm">
+                         <span className="font-medium">
+                              {tCommon("selected", {
+                                   count: Object.keys(rowSelection).length,
+                                   total: data?.total ?? 0,
+                              })}
+                         </span>
+                    </div>
+               )}
+
+               <Tabs
+                    value={tableMode}
+                    onValueChange={(value) => {
+                         const nextMode = value as "selection" | "expandable";
+                         setTableMode(nextMode);
+                         if (nextMode === "selection") {
+                              setExpanded({});
+                         } else {
+                              setRowSelection({});
+                         }
+                    }}
+               >
+                    <TabsList>
+                         <TabsTrigger value="selection">
+                              {t("modes.selectable")}
+                         </TabsTrigger>
+                         <TabsTrigger value="expandable">
+                              {t("modes.expandable")}
+                         </TabsTrigger>
+                    </TabsList>
+
+                    <TabsContent value="selection" className="mt-0">
+                         <DataTable
+                              columns={selectionColumns}
+                              {...sharedTableProps}
+                              rowSelection={rowSelection}
+                              onRowSelectionChange={setRowSelection}
+                         />
+                    </TabsContent>
+
+                    <TabsContent value="expandable" className="mt-0">
+                         <DataTable
+                              columns={activeColumns}
+                              {...sharedTableProps}
+                              expanded={expanded}
+                              onExpandedChange={setExpanded}
+                              renderExpandedRow={(user) => (
+                                   <UserExpandedRow userId={user.id} />
+                              )}
+                         />
+                    </TabsContent>
+               </Tabs>
+          </div>
      );
 }

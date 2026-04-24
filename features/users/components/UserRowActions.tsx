@@ -1,69 +1,39 @@
 "use client";
 
-import { MoreHorizontal } from "lucide-react";
 import { useTranslations } from "next-intl";
-
-import { Button } from "@/components/ui/button";
-import {
-     DropdownMenu,
-     DropdownMenuContent,
-     DropdownMenuItem,
-     DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import type { User } from "../types/user.types";
+import { Eye, Pencil, Trash } from "lucide-react";
+import { DataTableRowActions, RowAction } from "@/components/data-table";
+import { Row } from "@tanstack/react-table";
+import { User } from "../types/user.types";
+import { useDeleteUser } from "../hooks/useUsers";
 
 interface UserRowActionsProps {
-     user: User;
-     onViewProfile?: (user: User) => void;
-     onEditUser?: (user: User) => void;
-     onDeleteUser?: (user: User) => void;
+     row: Row<User>;
 }
 
-export function UserRowActions({
-     user,
-     onViewProfile,
-     onEditUser,
-     onDeleteUser,
-}: UserRowActionsProps) {
+export function UserRowActions({ row }: UserRowActionsProps) {
      const t = useTranslations("users.actions");
-     const hasActions = Boolean(onViewProfile || onEditUser || onDeleteUser);
+     const { mutate: deleteUser } = useDeleteUser();
 
-     return (
-          <DropdownMenu>
-               <DropdownMenuTrigger asChild>
-                    <Button
-                         variant="ghost"
-                         size="icon-sm"
-                         className="data-[state=open]:bg-accent"
-                         aria-label={t("viewProfile")}
-                    >
-                         <MoreHorizontal className="size-4" />
-                    </Button>
-               </DropdownMenuTrigger>
-               <DropdownMenuContent align="end">
-                    <DropdownMenuItem
-                         disabled={!onViewProfile}
-                         onClick={() => onViewProfile?.(user)}
-                    >
-                         {t("viewProfile")}
-                    </DropdownMenuItem>
-                    <DropdownMenuItem
-                         disabled={!onEditUser}
-                         onClick={() => onEditUser?.(user)}
-                    >
-                         {t("editUser")}
-                    </DropdownMenuItem>
-                    <DropdownMenuItem
-                         disabled={!onDeleteUser}
-                         variant="destructive"
-                         onClick={() => onDeleteUser?.(user)}
-                    >
-                         {t("deleteUser")}
-                    </DropdownMenuItem>
-                    {!hasActions && (
-                         <DropdownMenuItem disabled>{t("viewProfile")}</DropdownMenuItem>
-                    )}
-               </DropdownMenuContent>
-          </DropdownMenu>
-     );
+     const actions: RowAction<User>[] = [
+          {
+               label: t("viewProfile"),
+               icon: <Eye className="h-4 w-4" />,
+               onClick: (user) => console.log("view", user),
+          },
+          {
+               label: t("editUser"),
+               icon: <Pencil className="h-4 w-4" />,
+               onClick: (user) => console.log("edit", user),
+          },
+          {
+               label: t("deleteUser"),
+               icon: <Trash className="h-4 w-4" />,
+               onClick: (user) => deleteUser(user.id),
+               variant: "destructive",
+               separator: true,
+          },
+     ];
+
+     return <DataTableRowActions row={row} actions={actions} />;
 }

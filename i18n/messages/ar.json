@@ -42,6 +42,17 @@
       "inactive": "غير نشط",
       "banned": "محظور"
     },
+    "modes": {
+      "selectable": "جدول مع التحديد",
+      "expandable": "جدول قابل للتوسيع"
+    },
+    "expanded": {
+      "linkedEntities": "الكيانات المرتبطة",
+      "linkedEmails": "البريد الإلكتروني المرتبط",
+      "usageQueries": "الاستخدام (الاستعلامات)",
+      "lastActive": "آخر نشاط في الكيان",
+      "noEntities": "لا توجد كيانات مرتبطة"
+    },
     "actions": {
       "editUser": "تعديل المستخدم",
       "deleteUser": "حذف المستخدم",
