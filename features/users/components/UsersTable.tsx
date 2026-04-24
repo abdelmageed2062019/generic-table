@@ -32,6 +32,7 @@ export function UsersTable() {
      const [search, setSearch] = useState("");
      const [role, setRole] = useState<UserRole | "">("");
      const [status, setStatus] = useState<UserStatus | "">("");
+     const [joinedDate, setJoinedDate] = useState("");
      const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
      const [expanded, setExpanded] = useState<ExpandedState>({});
 
@@ -41,11 +42,13 @@ export function UsersTable() {
           search,
           role,
           status,
+          joinedDate,
      });
 
      const handleReset = () => {
           setRole("");
           setStatus("");
+          setJoinedDate("");
           setSearch("");
           setPagination((prev) => ({ ...prev, pageIndex: 0 }));
      };
@@ -193,12 +196,17 @@ export function UsersTable() {
                <UsersFilters
                     role={role}
                     status={status}
+                    joinedDate={joinedDate}
                     onRoleChange={(val) => {
                          setRole(val);
                          setPagination((prev) => ({ ...prev, pageIndex: 0 }));
                     }}
                     onStatusChange={(val) => {
                          setStatus(val);
+                         setPagination((prev) => ({ ...prev, pageIndex: 0 }));
+                    }}
+                    onJoinedDateChange={(value) => {
+                         setJoinedDate(value);
                          setPagination((prev) => ({ ...prev, pageIndex: 0 }));
                     }}
                     onReset={handleReset}

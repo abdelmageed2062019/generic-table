@@ -37,6 +37,7 @@ export interface UsersParams {
      search?: string;
      role?: UserRole | "";
      status?: UserStatus | "";
+     joinedDate?: string;
 }
 
 export interface CreateUserInput {

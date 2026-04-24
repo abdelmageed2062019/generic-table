@@ -4,7 +4,6 @@ import { locales, localeConfig, type Locale } from "../../i18n/config";
 import { QueryProvider } from "../../providers/QueryProvider";
 import { I18nProvider } from "../../providers/I18nProvider";
 import { LanguageSwitcher } from "../../i18n/LanguageSwitcher";
-import Link from "next/link";
 
 type Props = {
      children: React.ReactNode;
@@ -26,41 +25,23 @@ export default async function LocaleLayout({ children, params }: Props) {
      const { dir } = localeConfig[locale as Locale];
 
      return (
-          <html lang={locale} dir={dir}>
-               <body>
-                    <QueryProvider>
-                         <I18nProvider locale={locale} messages={messages}>
-                              <div className="min-h-screen bg-background">
-                                   {/* Navbar */}
-                                   <header className="border-b bg-card">
-                                        <div className="container mx-auto flex h-14 items-center justify-between px-4">
-                                             <nav className="flex items-center gap-6">
-                                                  <span className="font-semibold text-lg">DataApp</span>
-                                                  <Link
-                                                       href={`/${locale}/users`}
-                                                       className="text-sm text-muted-foreground hover:text-foreground transition-colors"
-                                                  >
-                                                       Users
-                                                  </Link>
-                                                  <Link
-                                                       href={`/${locale}/orders`}
-                                                       className="text-sm text-muted-foreground hover:text-foreground transition-colors"
-                                                  >
-                                                       Orders
-                                                  </Link>
-                                             </nav>
-                                             <LanguageSwitcher />
-                                        </div>
-                                   </header>
-
-                                   {/* Page content */}
-                                   <main className="container mx-auto px-4 py-8">
-                                        {children}
-                                   </main>
+          <QueryProvider>
+               <I18nProvider locale={locale} messages={messages}>
+                    <div lang={locale} dir={dir} className="min-h-screen bg-background">
+                         {/* Navbar */}
+                         <header className="border-b bg-card">
+                              <div className="container mx-auto flex h-14 items-center justify-between px-4">
+                                   <nav className="flex items-center gap-6">
+                                        <span className="font-semibold text-lg">DataApp</span>
+                                   </nav>
+                                   <LanguageSwitcher />
                               </div>
-                         </I18nProvider>
-                    </QueryProvider>
-               </body>
-          </html>
+                         </header>
+
+                         {/* Page content */}
+                         <main className="container mx-auto px-4 py-8">{children}</main>
+                    </div>
+               </I18nProvider>
+          </QueryProvider>
      );
 }

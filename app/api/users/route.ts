@@ -33,6 +33,7 @@ export async function GET(request: NextRequest) {
      const search = searchParams.get("search")?.trim().toLowerCase() ?? "";
      const role = searchParams.get("role");
      const status = searchParams.get("status");
+     const joinedDate = searchParams.get("joinedDate")?.trim() ?? "";
 
      const filteredUsers = db.data.users.filter((user) => {
           const matchesSearch =
@@ -41,8 +42,10 @@ export async function GET(request: NextRequest) {
                user.email.toLowerCase().includes(search);
           const matchesRole = !role || user.role === role;
           const matchesStatus = !status || user.status === status;
+          const matchesJoinedDate =
+               !joinedDate || user.createdAt.slice(0, 10) === joinedDate;
 
-          return matchesSearch && matchesRole && matchesStatus;
+          return matchesSearch && matchesRole && matchesStatus && matchesJoinedDate;
      });
 
      const start = (page - 1) * perPage;

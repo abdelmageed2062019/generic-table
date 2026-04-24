@@ -1,8 +1,17 @@
 import type { Metadata } from "next";
-import { Geist } from "next/font/google";
+import { Cairo, Roboto } from "next/font/google";
 import "./globals.css";
 
-const geist = Geist({ subsets: ["latin"] });
+const roboto = Roboto({
+     subsets: ["latin"],
+     variable: "--font-roboto",
+     weight: ["400", "500", "700"],
+});
+
+const cairo = Cairo({
+     subsets: ["latin", "arabic"],
+     variable: "--font-arabic",
+});
 
 export const metadata: Metadata = {
      title: "Data Table App",
@@ -15,8 +24,8 @@ export default function RootLayout({
      children: React.ReactNode;
 }) {
      return (
-          <html suppressHydrationWarning>
-               <body className={geist.className}>{children}</body>
+          <html lang="en" suppressHydrationWarning>
+               <body className={`${roboto.variable} ${cairo.variable}`}>{children}</body>
           </html>
      );
 }

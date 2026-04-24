@@ -49,6 +49,7 @@
 }
 
 :root {
+  --font-sans: var(--font-roboto);
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);
   --card: oklch(1 0 0);
@@ -120,6 +121,14 @@
 @layer base {
   * {
     @apply border-border outline-ring/50;
+  }
+
+  [lang="ar"] {
+    font-family: var(--font-arabic);
+  }
+
+  [lang="en"] {
+    font-family: var(--font-roboto);
   }
 
   body {

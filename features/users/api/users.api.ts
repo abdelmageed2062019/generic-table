@@ -14,6 +14,7 @@ function buildQuery(params: UsersParams) {
      if (params.search) searchParams.set("search", params.search);
      if (params.role) searchParams.set("role", params.role);
      if (params.status) searchParams.set("status", params.status);
+     if (params.joinedDate) searchParams.set("joinedDate", params.joinedDate);
 
      return searchParams.toString();
 }

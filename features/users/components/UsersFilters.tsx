@@ -9,27 +9,32 @@ import {
      SelectValue,
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import type { UserRole, UserStatus } from "../types/user.types";
 
 interface UsersFiltersProps {
      role: UserRole | "";
      status: UserStatus | "";
+     joinedDate: string;
      onRoleChange: (value: UserRole | "") => void;
      onStatusChange: (value: UserStatus | "") => void;
+     onJoinedDateChange: (value: string) => void;
      onReset: () => void;
 }
 
 export function UsersFilters({
      role,
      status,
+     joinedDate,
      onRoleChange,
      onStatusChange,
+     onJoinedDateChange,
      onReset,
 }: UsersFiltersProps) {
      const t = useTranslations("users.filters");
      const tCommon = useTranslations("common");
 
-     const hasActiveFilters = role !== "" || status !== "";
+     const hasActiveFilters = role !== "" || status !== "" || joinedDate !== "";
 
      return (
           <div className="flex items-center gap-2 flex-wrap">
@@ -68,6 +73,14 @@ export function UsersFilters({
                          <SelectItem value="banned">{t("banned")}</SelectItem>
                     </SelectContent>
                </Select>
+
+               <Input
+                    type="date"
+                    value={joinedDate}
+                    onChange={(event) => onJoinedDateChange(event.target.value)}
+                    className="w-[170px]"
+                    aria-label={t("joinedDate")}
+               />
 
                {/* Reset button — only shows when a filter is active */}
                {hasActiveFilters && (

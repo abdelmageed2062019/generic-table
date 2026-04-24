@@ -37,6 +37,7 @@
       "user": "مستخدم",
       "moderator": "مشرف",
       "status": "الحالة",
+      "joinedDate": "تاريخ الانضمام",
       "allStatuses": "جميع الحالات",
       "active": "نشط",
       "inactive": "غير نشط",

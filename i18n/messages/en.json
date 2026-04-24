@@ -37,6 +37,7 @@
       "user": "User",
       "moderator": "Moderator",
       "status": "Status",
+      "joinedDate": "Joined Date",
       "allStatuses": "All Statuses",
       "active": "Active",
       "inactive": "Inactive",
