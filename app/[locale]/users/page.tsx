@@ -1,3 +1,5 @@
+import { UsersTable } from "@/features/users/components/UsersTable";
+
 export default function UsersPage() {
-     return <div className="p-8 text-2xl">✅ App is working</div>;
+     return <UsersTable />;
 }
