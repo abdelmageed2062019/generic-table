@@ -5,6 +5,7 @@ import {
      userRoles,
      userStatuses,
      type CreateUserInput,
+     type DbUser,
      type User,
      type UserRole,
      type UserStatus,
@@ -14,13 +15,35 @@ function buildAvatar(id: string) {
      return `https://api.dicebear.com/7.x/avataaars/svg?seed=${id}`;
 }
 
-function generateUserId(users: User[]) {
+function generateUserId(users: Array<Pick<User, "id">>) {
      const maxId = users.reduce((max, user) => {
           const parsed = Number(user.id.replace(/\D/g, ""));
           return Number.isFinite(parsed) ? Math.max(max, parsed) : max;
      }, 1000);
 
      return `USR-${String(maxId + 1).padStart(4, "0")}`;
+}
+
+function toApiUser(user: DbUser, locale: "en" | "ar"): User {
+     return {
+          id: user.id,
+          name: locale === "ar" && user.nameAr?.trim() ? user.nameAr : user.name,
+          email: user.email,
+          role: user.role,
+          status: user.status,
+          avatar: user.avatar,
+          createdAt: user.createdAt,
+          linkedEntities: user.linkedEntities.map((entity) => ({
+               id: entity.id,
+               entity:
+                    locale === "ar" && entity.entityAr?.trim()
+                         ? entity.entityAr
+                         : entity.entity,
+               email: entity.email,
+               usageQueries: entity.usageQueries,
+               lastActive: entity.lastActive,
+          })),
+     };
 }
 
 export async function GET(request: NextRequest) {
@@ -34,12 +57,14 @@ export async function GET(request: NextRequest) {
      const role = searchParams.get("role");
      const status = searchParams.get("status");
      const joinedDate = searchParams.get("joinedDate")?.trim() ?? "";
+     const locale = searchParams.get("locale") === "ar" ? "ar" : "en";
 
      const filteredUsers = db.data.users.filter((user) => {
-          const matchesSearch =
-               !search ||
-               user.name.toLowerCase().includes(search) ||
-               user.email.toLowerCase().includes(search);
+          const matchesSearch = !search
+               ? true
+               : [user.id, user.name, user.nameAr, user.email].some((value) =>
+                    value?.toLowerCase().includes(search)
+               );
           const matchesRole = !role || user.role === role;
           const matchesStatus = !status || user.status === status;
           const matchesJoinedDate =
@@ -49,7 +74,9 @@ export async function GET(request: NextRequest) {
      });
 
      const start = (page - 1) * perPage;
-     const data = filteredUsers.slice(start, start + perPage);
+     const data = filteredUsers
+          .slice(start, start + perPage)
+          .map((user) => toApiUser(user, locale));
 
      return NextResponse.json({
           data,

@@ -23,6 +23,15 @@ export interface User {
      linkedEntities: LinkedEntity[];
 }
 
+export interface DbLinkedEntity extends LinkedEntity {
+     entityAr?: string;
+}
+
+export interface DbUser extends Omit<User, "linkedEntities"> {
+     nameAr?: string;
+     linkedEntities: DbLinkedEntity[];
+}
+
 export interface UsersResponse {
      data: User[];
      total: number;
@@ -38,6 +47,7 @@ export interface UsersParams {
      role?: UserRole | "";
      status?: UserStatus | "";
      joinedDate?: string;
+     locale?: string;
 }
 
 export interface CreateUserInput {
@@ -51,5 +61,5 @@ export interface CreateUserInput {
 }
 
 export interface DbSchema {
-     users: User[];
+     users: DbUser[];
 }

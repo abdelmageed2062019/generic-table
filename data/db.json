@@ -3,6 +3,7 @@
     {
       "id": "USR-1001",
       "name": "Alice Miller",
+      "nameAr": "أليس ميلر",
       "email": "alice.miller@example.com",
       "role": "admin",
       "status": "active",
@@ -12,6 +13,7 @@
         {
           "id": "USR-1001-ENT-1",
           "entity": "Google Cloud Project Alpha",
+          "entityAr": "مشروع جوجل كلاود ألفا",
           "email": "alice.gcp@example.com",
           "usageQueries": 1250,
           "lastActive": "1 hr ago"
@@ -19,6 +21,7 @@
         {
           "id": "USR-1001-ENT-2",
           "entity": "Slack Workspace Marketing",
+          "entityAr": "مساحة عمل سلاك للتسويق",
           "email": "alice.slack@example.com",
           "usageQueries": 4300,
           "lastActive": "2 hrs ago"
@@ -56,6 +59,7 @@
     {
       "id": "USR-1004",
       "name": "Mohamed Hassan",
+      "nameAr": "محمد حسن",
       "email": "mohamed.hassan@example.com",
       "role": "admin",
       "status": "active",
@@ -65,6 +69,7 @@
         {
           "id": "USR-1004-ENT-1",
           "entity": "AWS Account Production",
+          "entityAr": "حساب AWS للإنتاج",
           "email": "mohamed.aws@example.com",
           "usageQueries": 6780,
           "lastActive": "Just now"
@@ -72,6 +77,7 @@
         {
           "id": "USR-1004-ENT-2",
           "entity": "Jira Project Backend",
+          "entityAr": "مشروع جيرا للباك-إند",
           "email": "mohamed.jira@example.com",
           "usageQueries": 2140,
           "lastActive": "30 mins ago"

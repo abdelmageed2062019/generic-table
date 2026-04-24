@@ -1,6 +1,6 @@
 "use client";
 
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { useLinkedEntities } from "../hooks/useLinkedEntities";
 import {
      Table,
@@ -17,8 +17,9 @@ interface UserExpandedRowProps {
 }
 
 export function UserExpandedRow({ userId }: UserExpandedRowProps) {
+     const locale = useLocale();
      const t = useTranslations("users.expanded");
-     const { data: entities, isLoading } = useLinkedEntities(userId);
+     const { data: entities, isLoading } = useLinkedEntities(userId, locale);
 
      return (
           <div className="bg-muted/40 border-t px-6 py-4">

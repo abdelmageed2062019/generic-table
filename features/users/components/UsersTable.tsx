@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { ColumnDef, RowSelectionState, ExpandedState } from "@tanstack/react-table";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { ChevronDown, ChevronRight } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Badge } from "@/components/ui/badge";
@@ -22,6 +22,7 @@ const statusVariant: Record<UserStatus, "default" | "secondary" | "destructive">
 };
 
 export function UsersTable() {
+     const locale = useLocale();
      const t = useTranslations("users");
      const tCommon = useTranslations("common");
      const [tableMode, setTableMode] = useState<"selection" | "expandable">(
@@ -43,6 +44,7 @@ export function UsersTable() {
           role,
           status,
           joinedDate,
+          locale,
      });
 
      const handleReset = () => {
