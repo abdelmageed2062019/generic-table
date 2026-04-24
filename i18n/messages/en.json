@@ -1,0 +1,91 @@
+{
+  "common": {
+    "search": "Search",
+    "filter": "Filter",
+    "reset": "Reset",
+    "actions": "Actions",
+    "edit": "Edit",
+    "delete": "Delete",
+    "view": "View",
+    "loading": "Loading...",
+    "noResults": "No results found",
+    "selected": "{count} of {total} row(s) selected"
+  },
+  "pagination": {
+    "rowsPerPage": "Rows per page",
+    "page": "Page",
+    "of": "of",
+    "first": "First page",
+    "previous": "Previous page",
+    "next": "Next page",
+    "last": "Last page"
+  },
+  "users": {
+    "title": "Users",
+    "description": "Manage and view all users",
+    "columns": {
+      "name": "Name",
+      "email": "Email",
+      "role": "Role",
+      "status": "Status",
+      "createdAt": "Created At"
+    },
+    "filters": {
+      "role": "Role",
+      "allRoles": "All Roles",
+      "admin": "Admin",
+      "user": "User",
+      "moderator": "Moderator",
+      "status": "Status",
+      "allStatuses": "All Statuses",
+      "active": "Active",
+      "inactive": "Inactive",
+      "banned": "Banned"
+    },
+    "actions": {
+      "editUser": "Edit user",
+      "deleteUser": "Delete user",
+      "viewProfile": "View profile"
+    }
+  },
+  "orders": {
+    "title": "Orders",
+    "description": "Manage and view all orders",
+    "columns": {
+      "orderNumber": "Order #",
+      "customer": "Customer",
+      "status": "Status",
+      "total": "Total",
+      "items": "Items",
+      "createdAt": "Created At"
+    },
+    "filters": {
+      "status": "Status",
+      "allStatuses": "All Statuses",
+      "pending": "Pending",
+      "processing": "Processing",
+      "shipped": "Shipped",
+      "delivered": "Delivered",
+      "cancelled": "Cancelled"
+    },
+    "actions": {
+      "viewOrder": "View order",
+      "editOrder": "Edit order",
+      "cancelOrder": "Cancel order"
+    },
+    "expanded": {
+      "orderItems": "Order Items",
+      "product": "Product",
+      "quantity": "Quantity",
+      "price": "Price",
+      "subtotal": "Subtotal",
+      "shippingAddress": "Shipping Address",
+      "paymentMethod": "Payment Method",
+      "notes": "Notes"
+    }
+  },
+  "navigation": {
+    "users": "Users",
+    "orders": "Orders"
+  }
+}

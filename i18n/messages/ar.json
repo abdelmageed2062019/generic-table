@@ -1,0 +1,91 @@
+{
+  "common": {
+    "search": "بحث",
+    "filter": "تصفية",
+    "reset": "إعادة تعيين",
+    "actions": "إجراءات",
+    "edit": "تعديل",
+    "delete": "حذف",
+    "view": "عرض",
+    "loading": "جاري التحميل...",
+    "noResults": "لا توجد نتائج",
+    "selected": "تم تحديد {count} من {total} صف"
+  },
+  "pagination": {
+    "rowsPerPage": "صفوف في الصفحة",
+    "page": "صفحة",
+    "of": "من",
+    "first": "الصفحة الأولى",
+    "previous": "الصفحة السابقة",
+    "next": "الصفحة التالية",
+    "last": "الصفحة الأخيرة"
+  },
+  "users": {
+    "title": "المستخدمون",
+    "description": "إدارة وعرض جميع المستخدمين",
+    "columns": {
+      "name": "الاسم",
+      "email": "البريد الإلكتروني",
+      "role": "الدور",
+      "status": "الحالة",
+      "createdAt": "تاريخ الإنشاء"
+    },
+    "filters": {
+      "role": "الدور",
+      "allRoles": "جميع الأدوار",
+      "admin": "مدير",
+      "user": "مستخدم",
+      "moderator": "مشرف",
+      "status": "الحالة",
+      "allStatuses": "جميع الحالات",
+      "active": "نشط",
+      "inactive": "غير نشط",
+      "banned": "محظور"
+    },
+    "actions": {
+      "editUser": "تعديل المستخدم",
+      "deleteUser": "حذف المستخدم",
+      "viewProfile": "عرض الملف الشخصي"
+    }
+  },
+  "orders": {
+    "title": "الطلبات",
+    "description": "إدارة وعرض جميع الطلبات",
+    "columns": {
+      "orderNumber": "رقم الطلب",
+      "customer": "العميل",
+      "status": "الحالة",
+      "total": "الإجمالي",
+      "items": "العناصر",
+      "createdAt": "تاريخ الإنشاء"
+    },
+    "filters": {
+      "status": "الحالة",
+      "allStatuses": "جميع الحالات",
+      "pending": "قيد الانتظار",
+      "processing": "قيد المعالجة",
+      "shipped": "تم الشحن",
+      "delivered": "تم التسليم",
+      "cancelled": "ملغي"
+    },
+    "actions": {
+      "viewOrder": "عرض الطلب",
+      "editOrder": "تعديل الطلب",
+      "cancelOrder": "إلغاء الطلب"
+    },
+    "expanded": {
+      "orderItems": "عناصر الطلب",
+      "product": "المنتج",
+      "quantity": "الكمية",
+      "price": "السعر",
+      "subtotal": "المجموع الفرعي",
+      "shippingAddress": "عنوان الشحن",
+      "paymentMethod": "طريقة الدفع",
+      "notes": "ملاحظات"
+    }
+  },
+  "navigation": {
+    "users": "المستخدمون",
+    "orders": "الطلبات"
+  }
+}
