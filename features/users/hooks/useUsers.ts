@@ -3,7 +3,7 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
-import { fetchUsers, deleteUser, createUser } from "../api/users.api";
+import { fetchUsers, deleteUser, createUser, updateUser } from "../api/users.api";
 import type { CreateUserInput, UsersParams } from "../types/user.types";
 
 // Query key factory — keeps keys consistent across the app
@@ -51,6 +51,23 @@ export function useCreateUser() {
           },
           onError: () => {
                toast.error(t("createError"));
+          },
+     });
+}
+
+export function useUpdateUser() {
+     const queryClient = useQueryClient();
+     const t = useTranslations("users.toasts");
+
+     return useMutation({
+          mutationFn: ({ id, payload }: { id: string; payload: Partial<CreateUserInput> }) =>
+               updateUser(id, payload),
+          onSuccess: () => {
+               queryClient.invalidateQueries({ queryKey: usersKeys.all });
+               toast.success(t("userUpdated"));
+          },
+          onError: () => {
+               toast.error(t("updateError"));
           },
      });
 }
