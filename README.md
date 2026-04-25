@@ -25,6 +25,7 @@ Other useful scripts:
 ```bash
 npm run lint
 npm run build
+npm test
 ```
 
 ## Approach
@@ -32,12 +33,17 @@ npm run build
 - Next.js App Router with locale segment (`/en`, `/ar`) using `next-intl`.
 - RTL/LTR support via a direction provider; UI components use `dir` and direction-aware alignment (`text-start`, etc.).
 - Users table is built on TanStack Table + a reusable `DataTable` wrapper (sorting, pagination, selection, expandable rows).
+- Two pages are exposed via routes:
+  - `/[locale]/users-selection` (row selection)
+  - `/[locale]/users-expandable` (expandable rows)
+  - The tabs keep the same UI but navigate between these routes.
 - Data fetching and mutations use React Query:
   - Query keys are centralized to keep invalidation consistent.
   - Create/Delete invalidate the users cache so the table refreshes.
 - Local data is stored in a JSON file via `lowdb` (`data/db.json`) and served through Next.js API routes under `/api/users`.
 - CSV export fetches the currently-filtered users and generates a UTF-8 CSV (with BOM for correct Excel/Arabic support).
 - Sonner is used for toast notifications on create/delete success and error.
+- Error boundary (App Router) is implemented for the locale segment via `app/[locale]/error.tsx`.
 
 ## Mock Data Source
 
