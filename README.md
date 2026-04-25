@@ -2,6 +2,10 @@
 
 ## How to Run
 
+Live demo:
+
+- https://generic-table-rho.vercel.app/en/users-selection
+
 Requirements:
 
 - Node.js 18+

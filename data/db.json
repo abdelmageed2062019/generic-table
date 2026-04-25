@@ -245,6 +245,16 @@
       "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=USR-1014",
       "createdAt": "2026-04-25T12:31:11.074Z",
       "linkedEntities": []
+    },
+    {
+      "id": "USR-1015",
+      "name": "Abdelmageed Hamdi",
+      "email": "abdelmageedhamdi@gmail.com",
+      "role": "user",
+      "status": "active",
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=USR-1015",
+      "createdAt": "2026-04-25T18:00:11.911Z",
+      "linkedEntities": []
     }
   ]
 }
