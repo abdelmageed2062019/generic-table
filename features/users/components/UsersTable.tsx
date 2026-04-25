@@ -227,16 +227,7 @@ export function UsersTable() {
                     <p className="text-muted-foreground text-sm">{t("description")}</p>
                </div>
 
-               {tableMode === "selection" && Object.keys(rowSelection).length > 0 && (
-                    <div className="flex items-center gap-2 rounded-md bg-muted px-4 py-2 text-sm">
-                         <span className="font-medium">
-                              {tCommon("selected", {
-                                   count: Object.keys(rowSelection).length,
-                                   total: data?.total ?? 0,
-                              })}
-                         </span>
-                    </div>
-               )}
+            
 
                <Tabs
                     value={tableMode}

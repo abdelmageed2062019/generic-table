@@ -203,7 +203,6 @@ export function DataTable<TData>({
                {/* Pagination */}
                <DataTablePagination
                     table={table}
-                    total={total}
                     pageSizeOptions={pageSizeOptions}
                />
           </div>

@@ -1,6 +1,8 @@
 "use client";
 
-import { useTranslations } from "next-intl";
+import { useMemo } from "react";
+
+import { useLocale, useTranslations } from "next-intl";
 import { Table } from "@tanstack/react-table";
 import {
      ChevronLeft,
@@ -9,6 +11,7 @@ import {
      ChevronsRight,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useDirection } from "@/components/ui/direction";
 import {
      Select,
      SelectContent,
@@ -19,30 +22,39 @@ import {
 
 interface DataTablePaginationProps<TData> {
      table: Table<TData>;
-     total: number;
      pageSizeOptions?: number[];
 }
 
 export function DataTablePagination<TData>({
      table,
-     total,
      pageSizeOptions = [5, 10, 20, 50],
 }: DataTablePaginationProps<TData>) {
+     const locale = useLocale();
      const t = useTranslations("pagination");
      const tCommon = useTranslations("common");
+     const direction = useDirection();
 
      const { pageIndex, pageSize } = table.getState().pagination;
      const selectedCount = table.getFilteredSelectedRowModel().rows.length;
      const totalRows = table.getFilteredRowModel().rows.length;
+     const pageCount = table.getPageCount();
+
+     const numberFormatter = useMemo(() => new Intl.NumberFormat(locale), [locale]);
+     const formatNumber = (value: number) => numberFormatter.format(value);
+
+     const FirstPageIcon = direction === "rtl" ? ChevronsRight : ChevronsLeft;
+     const PreviousPageIcon = direction === "rtl" ? ChevronRight : ChevronLeft;
+     const NextPageIcon = direction === "rtl" ? ChevronLeft : ChevronRight;
+     const LastPageIcon = direction === "rtl" ? ChevronsLeft : ChevronsRight;
 
      return (
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4 px-2 py-4">
                {/* Selection count */}
                <div className="text-sm text-muted-foreground">
-                    {selectedCount > 0
-                         ? tCommon("selected", { count: selectedCount, total: totalRows })
-                         : <span>{total} {t("of")} {total}</span>
-                    }
+                    {tCommon("selected", {
+                         count: formatNumber(selectedCount),
+                         total: formatNumber(totalRows),
+                    })}
                </div>
 
                <div className="flex items-center gap-6">
@@ -63,7 +75,7 @@ export function DataTablePagination<TData>({
                               <SelectContent side="top">
                                    {pageSizeOptions.map((size) => (
                                         <SelectItem key={size} value={String(size)}>
-                                             {size}
+                                             {formatNumber(size)}
                                         </SelectItem>
                                    ))}
                               </SelectContent>
@@ -72,7 +84,8 @@ export function DataTablePagination<TData>({
 
                     {/* Page indicator */}
                     <div className="text-sm text-muted-foreground whitespace-nowrap">
-                         {t("page")} {pageIndex + 1} {t("of")} {table.getPageCount()}
+                         {t("page")} <bdi>{formatNumber(pageIndex + 1)}</bdi> {t("of")}{" "}
+                         <bdi>{formatNumber(pageCount)}</bdi>
                     </div>
 
                     {/* Navigation buttons */}
@@ -85,7 +98,7 @@ export function DataTablePagination<TData>({
                               disabled={!table.getCanPreviousPage()}
                               title={t("first")}
                          >
-                              <ChevronsLeft className="h-4 w-4" />
+                              <FirstPageIcon className="h-4 w-4" />
                          </Button>
                          <Button
                               variant="outline"
@@ -95,7 +108,7 @@ export function DataTablePagination<TData>({
                               disabled={!table.getCanPreviousPage()}
                               title={t("previous")}
                          >
-                              <ChevronLeft className="h-4 w-4" />
+                              <PreviousPageIcon className="h-4 w-4" />
                          </Button>
                          <Button
                               variant="outline"
@@ -105,17 +118,17 @@ export function DataTablePagination<TData>({
                               disabled={!table.getCanNextPage()}
                               title={t("next")}
                          >
-                              <ChevronRight className="h-4 w-4" />
+                              <NextPageIcon className="h-4 w-4" />
                          </Button>
                          <Button
                               variant="outline"
                               size="icon"
                               className="h-8 w-8"
-                              onClick={() => table.setPageIndex(table.getPageCount() - 1)}
+                              onClick={() => table.setPageIndex(pageCount - 1)}
                               disabled={!table.getCanNextPage()}
                               title={t("last")}
                          >
-                              <ChevronsRight className="h-4 w-4" />
+                              <LastPageIcon className="h-4 w-4" />
                          </Button>
                     </div>
                </div>
