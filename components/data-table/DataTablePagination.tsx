@@ -30,22 +30,23 @@ export function DataTablePagination<TData>({
 }: DataTablePaginationProps<TData>) {
      const locale = useLocale();
      const t = useTranslations("pagination");
-     const tCommon = useTranslations("common");
 
      const { pageIndex, pageSize } = table.getState().pagination;
-     const selectedCount = table.getFilteredSelectedRowModel().rows.length;
      const totalRows = table.getFilteredRowModel().rows.length;
      const pageCount = table.getPageCount();
 
      const numberFormatter = useMemo(() => new Intl.NumberFormat(locale), [locale]);
      const formatNumber = (value: number) => numberFormatter.format(value);
 
+     const from = totalRows === 0 ? 0 : pageIndex * pageSize + 1;
+     const to = totalRows === 0 ? 0 : Math.min((pageIndex + 1) * pageSize, totalRows);
+
      return (
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-4 px-2 py-4">
-               {/* Selection count */}
+          <div className="flex flex-col gap-3 px-4 py-3 sm:flex-row sm:items-center sm:justify-between">
                <div className="text-sm text-muted-foreground">
-                    {tCommon("selected", {
-                         count: formatNumber(selectedCount),
+                    {t("showing", {
+                         from: formatNumber(from),
+                         to: formatNumber(to),
                          total: formatNumber(totalRows),
                     })}
                </div>

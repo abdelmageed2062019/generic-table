@@ -111,100 +111,90 @@ export function DataTable<TData>({
      });
 
      return (
-          <div className="space-y-2">
-               {/* Toolbar: search + filters */}
-               <DataTableToolbar
-                    search={search}
-                    onSearchChange={(val) => {
-                         onSearchChange(val);
-                         onPaginationChange({ ...pagination, pageIndex: 0 });
-                    }}
-                    filterSlot={filterSlot}
-               />
+          <div className="rounded-xl border bg-card shadow-sm overflow-hidden">
+               <div className="border-b bg-muted/10 px-4 py-3">
+                    <DataTableToolbar
+                         search={search}
+                         onSearchChange={(val) => {
+                              onSearchChange(val);
+                              onPaginationChange({ ...pagination, pageIndex: 0 });
+                         }}
+                         filterSlot={filterSlot}
+                    />
+               </div>
 
-               {/* Table */}
-               <div className="rounded-md border">
-                    <Table>
-                         <TableHeader>
-                              {table.getHeaderGroups().map((headerGroup) => (
-                                   <TableRow key={headerGroup.id}>
-                                        {headerGroup.headers.map((header) => (
-                                             <TableHead key={header.id}>
-                                                  {header.isPlaceholder
-                                                       ? null
-                                                       : flexRender(
-                                                            header.column.columnDef.header,
-                                                            header.getContext()
-                                                       )}
-                                             </TableHead>
+               <Table>
+                    <TableHeader className="bg-muted/30">
+                         {table.getHeaderGroups().map((headerGroup) => (
+                              <TableRow key={headerGroup.id} className="hover:bg-transparent">
+                                   {headerGroup.headers.map((header) => (
+                                        <TableHead key={header.id} className="h-11">
+                                             {header.isPlaceholder
+                                                  ? null
+                                                  : flexRender(
+                                                       header.column.columnDef.header,
+                                                       header.getContext()
+                                                  )}
+                                        </TableHead>
+                                   ))}
+                              </TableRow>
+                         ))}
+                    </TableHeader>
+
+                    <TableBody>
+                         {isLoading ? (
+                              Array.from({ length: pagination.pageSize }).map((_, i) => (
+                                   <TableRow key={i}>
+                                        {columns.map((_, j) => (
+                                             <TableCell key={j}>
+                                                  <Skeleton className="h-6 w-full" />
+                                             </TableCell>
                                         ))}
                                    </TableRow>
-                              ))}
-                         </TableHeader>
-
-                         <TableBody>
-                              {isLoading ? (
-                                   // Loading skeleton
-                                   Array.from({ length: pagination.pageSize }).map((_, i) => (
-                                        <TableRow key={i}>
-                                             {columns.map((_, j) => (
-                                                  <TableCell key={j}>
-                                                       <Skeleton className="h-6 w-full" />
+                              ))
+                         ) : table.getRowModel().rows.length === 0 ? (
+                              <TableRow>
+                                   <TableCell
+                                        colSpan={columns.length}
+                                        className="h-32 text-center text-muted-foreground"
+                                   >
+                                        {t("noResults")}
+                                   </TableCell>
+                              </TableRow>
+                         ) : (
+                              table.getRowModel().rows.map((row) => (
+                                   <>
+                                        <TableRow
+                                             key={row.id}
+                                             data-state={row.getIsSelected() ? "selected" : undefined}
+                                             className={row.getIsExpanded() ? "border-b-0" : undefined}
+                                        >
+                                             {row.getVisibleCells().map((cell) => (
+                                                  <TableCell key={cell.id} className="py-3">
+                                                       {flexRender(
+                                                            cell.column.columnDef.cell,
+                                                            cell.getContext()
+                                                       )}
                                                   </TableCell>
                                              ))}
                                         </TableRow>
-                                   ))
-                              ) : table.getRowModel().rows.length === 0 ? (
-                                   // Empty state
-                                   <TableRow>
-                                        <TableCell
-                                             colSpan={columns.length}
-                                             className="h-32 text-center text-muted-foreground"
-                                        >
-                                             {t("noResults")}
-                                        </TableCell>
-                                   </TableRow>
-                              ) : (
-                                   // Data rows
-                                   table.getRowModel().rows.map((row) => (
-                                        <>
-                                             <TableRow
-                                                  key={row.id}
-                                                  data-state={row.getIsSelected() ? "selected" : undefined}
-                                                  className={
-                                                       row.getIsExpanded() ? "border-b-0" : undefined
-                                                  }
-                                             >
-                                                  {row.getVisibleCells().map((cell) => (
-                                                       <TableCell key={cell.id}>
-                                                            {flexRender(
-                                                                 cell.column.columnDef.cell,
-                                                                 cell.getContext()
-                                                            )}
-                                                       </TableCell>
-                                                  ))}
+
+                                        {row.getIsExpanded() && renderExpandedRow && (
+                                             <TableRow key={`${row.id}-expanded`}>
+                                                  <TableCell colSpan={columns.length} className="p-0">
+                                                       {renderExpandedRow(row.original)}
+                                                  </TableCell>
                                              </TableRow>
+                                        )}
+                                   </>
+                              ))
+                         )}
+                    </TableBody>
+               </Table>
 
-                                             {/* Expanded row content */}
-                                             {row.getIsExpanded() && renderExpandedRow && (
-                                                  <TableRow key={`${row.id}-expanded`}>
-                                                       <TableCell colSpan={columns.length} className="p-0">
-                                                            {renderExpandedRow(row.original)}
-                                                       </TableCell>
-                                                  </TableRow>
-                                             )}
-                                        </>
-                                   ))
-                              )}
-                         </TableBody>
-                    </Table>
+               <div className="border-t bg-card">
+                    <DataTablePagination table={table} pageSizeOptions={pageSizeOptions} />
                </div>
-
-               {/* Pagination */}
-               <DataTablePagination
-                    table={table}
-                    pageSizeOptions={pageSizeOptions}
-               />
           </div>
      );
 }

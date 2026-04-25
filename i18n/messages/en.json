@@ -18,6 +18,7 @@
   },
   "pagination": {
     "rowsPerPage": "Rows per page",
+    "showing": "Showing {from}-{to} of {total} entries",
     "page": "Page",
     "of": "of",
     "first": "First page",
@@ -26,14 +27,15 @@
     "last": "Last page"
   },
   "users": {
-    "title": "Users",
+    "title": "Users Management",
     "description": "Manage and view all users",
     "columns": {
       "name": "Name",
       "email": "Email",
       "role": "Role",
       "status": "Status",
-      "createdAt": "Created At"
+      "createdAt": "Created At",
+      "actions": "Actions"
     },
     "filters": {
       "role": "Role",

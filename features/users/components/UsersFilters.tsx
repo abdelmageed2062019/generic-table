@@ -77,7 +77,7 @@ export function UsersFilters({
      };
 
      return (
-          <div className="flex items-center gap-2 flex-wrap">
+          <div className="flex flex-wrap items-center justify-end gap-2">
                {/* Role filter */}
                <Select
                     value={role || "all"}
@@ -85,7 +85,7 @@ export function UsersFilters({
                          onRoleChange(val === "all" ? "" : (val as UserRole))
                     }
                >
-                    <SelectTrigger className="w-[140px]">
+                    <SelectTrigger className="h-9 w-[140px] bg-background">
                          <SelectValue placeholder={t("role")} />
                     </SelectTrigger>
                     <SelectContent>
@@ -103,7 +103,7 @@ export function UsersFilters({
                          onStatusChange(val === "all" ? "" : (val as UserStatus))
                     }
                >
-                    <SelectTrigger className="w-[140px]">
+                    <SelectTrigger className="h-9 w-[140px] bg-background">
                          <SelectValue placeholder={t("status")} />
                     </SelectTrigger>
                     <SelectContent>
@@ -120,7 +120,7 @@ export function UsersFilters({
                               variant="outline"
                               data-empty={!selectedDate}
                               dir={direction}
-                              className="w-[170px] justify-between text-start font-normal data-[empty=true]:text-muted-foreground"
+                              className="h-9 w-[190px] justify-between bg-background text-start font-normal data-[empty=true]:text-muted-foreground"
                          >
                               <CalendarIcon className="h-4 w-4 opacity-70" />
                               {selectedDate ? (

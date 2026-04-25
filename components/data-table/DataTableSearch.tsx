@@ -13,7 +13,7 @@ export function DataTableSearch({ value, onChange }: DataTableSearchProps) {
      const t = useTranslations("common");
 
      return (
-          <div className="relative w-full sm:w-[280px]">
+          <div className="relative w-full lg:w-[340px]">
                <Search className="absolute start-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                <Input
                     placeholder={t("search")}

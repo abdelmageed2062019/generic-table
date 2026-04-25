@@ -17,13 +17,15 @@ export function DataTableColumnHeader<TData, TValue>({
      // Non-sortable columns just render the title
      if (!column.getCanSort()) {
           return (
-               <div className={cn("text-sm font-medium", className)}>{title}</div>
+               <div className={cn("text-xs font-semibold text-muted-foreground", className)}>
+                    {title}
+               </div>
           );
      }
 
      return (
           <div className={cn("flex items-center", className)}>
-               <span className="text-sm font-medium">{title}</span>
+               <span className="text-xs font-semibold text-muted-foreground">{title}</span>
           </div>
      );
 }

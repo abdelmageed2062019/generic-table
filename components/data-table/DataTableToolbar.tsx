@@ -14,15 +14,13 @@ export function DataTableToolbar({
      filterSlot,
 }: DataTableToolbarProps) {
      return (
-          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 py-4">
+          <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
                {/* Search */}
                <DataTableSearch value={search} onChange={onSearchChange} />
 
                {/* Filters slot — each feature injects its own filters here */}
                {filterSlot && (
-                    <div className="flex items-center gap-2 flex-wrap">
-                         {filterSlot}
-                    </div>
+                    <div className="flex items-center gap-2 flex-wrap">{filterSlot}</div>
                )}
           </div>
      );

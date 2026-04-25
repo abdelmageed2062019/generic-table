@@ -1,16 +1,28 @@
 "use client";
 
-import { describe, expect, it, vi } from "vitest";
-import { render, screen } from "@testing-library/react";
-import userEvent from "@testing-library/user-event";
-import { UsersTable } from "./UsersTable";
+import { afterEach, describe, expect, it, vi } from "vitest";
+import { cleanup, render, screen } from "@testing-library/react";
+import type { ComponentProps, ReactNode } from "react";
+import { UsersModeNav } from "@/components/UsersModeNav";
 
-const pushMock = vi.fn();
+let pathnameMock = "/users-selection";
 
-vi.mock("next/navigation", () => {
+afterEach(() => {
+     cleanup();
+});
+
+vi.mock("@/i18n/navigation", () => {
      return {
-          useRouter: () => ({ push: pushMock }),
-          usePathname: () => "/en/users-selection",
+          Link: ({
+               href,
+               children,
+               ...props
+          }: ComponentProps<"a"> & { href: string; children?: ReactNode }) => (
+               <a href={href} {...props}>
+                    {children}
+               </a>
+          ),
+          usePathname: () => pathnameMock,
      };
 });
 
@@ -21,47 +33,30 @@ vi.mock("next-intl", () => {
      };
 });
 
-vi.mock("@/components/data-table", () => {
-     return {
-          DataTable: () => <div data-testid="datatable" />,
-          DataTableColumnHeader: () => <div />,
-          DataTableRowActions: () => <div />,
-     };
-});
-
-vi.mock("./UsersFilters", () => {
-     return {
-          UsersFilters: () => <div data-testid="filters" />,
-     };
-});
-
-vi.mock("./UserRowActions", () => {
-     return {
-          UserRowActions: () => <div data-testid="row-actions" />,
-     };
-});
-
-vi.mock("./UserExpandedRow", () => {
-     return {
-          UserExpandedRow: () => <div data-testid="expanded" />,
-     };
-});
-
-vi.mock("../hooks/useUsers", () => {
-     return {
-          useUsers: () => ({ data: { data: [], total: 0 }, isLoading: false }),
-          useCreateUser: () => ({ mutateAsync: vi.fn(), isPending: false }),
-     };
-});
-
 describe("UsersTable routing", () => {
-     it("navigates to /users-expandable when switching tab", async () => {
-          pushMock.mockClear();
-          render(<UsersTable />);
+     it("highlights Selectable Table when on /users-selection", () => {
+          pathnameMock = "/users-selection";
+          render(<UsersModeNav />);
 
-          const user = userEvent.setup();
-          await user.click(screen.getByRole("tab", { name: "modes.expandable" }));
+          expect(screen.getByRole("link", { name: "modes.selectable" })).toHaveAttribute(
+               "aria-current",
+               "page"
+          );
+          expect(screen.getByRole("link", { name: "modes.expandable" })).not.toHaveAttribute(
+               "aria-current"
+          );
+     });
 
-          expect(pushMock).toHaveBeenCalledWith("/en/users-expandable");
+     it("highlights Expandable Table when on /users-expandable", () => {
+          pathnameMock = "/users-expandable";
+          render(<UsersModeNav />);
+
+          expect(screen.getByRole("link", { name: "modes.expandable" })).toHaveAttribute(
+               "aria-current",
+               "page"
+          );
+          expect(screen.getByRole("link", { name: "modes.selectable" })).not.toHaveAttribute(
+               "aria-current"
+          );
      });
 });

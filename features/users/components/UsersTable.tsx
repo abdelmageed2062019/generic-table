@@ -3,14 +3,13 @@
 import { useState } from "react";
 import { ColumnDef, RowSelectionState, ExpandedState } from "@tanstack/react-table";
 import { useLocale, useTranslations } from "next-intl";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { ChevronDown, ChevronRight, Download, Plus } from "lucide-react";
 import { Popover as PopoverPrimitive } from "radix-ui";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { DataTable, DataTableColumnHeader } from "@/components/data-table";
 import { useDirection } from "@/components/ui/direction";
 import {
@@ -28,18 +27,11 @@ import { useCreateUser, useUsers } from "../hooks/useUsers";
 import type { User, UserRole, UserStatus } from "../types/user.types";
 import { formatLongDate } from "@/lib/formatters";
 
-const statusVariant: Record<UserStatus, "default" | "secondary" | "destructive"> = {
-     active: "default",
-     inactive: "secondary",
-     banned: "destructive",
-};
-
 export function UsersTable() {
      const locale = useLocale();
      const direction = useDirection();
      const t = useTranslations("users");
      const tCommon = useTranslations("common");
-     const router = useRouter();
      const pathname = usePathname();
      const tableMode: "selection" | "expandable" = pathname?.includes("/users-expandable")
           ? "expandable"
@@ -111,7 +103,7 @@ export function UsersTable() {
                     <DataTableColumnHeader column={column} title={t("columns.role")} />
                ),
                cell: ({ row }) => (
-                    <Badge variant="outline" className="capitalize">
+                    <Badge variant="outline" className="capitalize bg-muted/40">
                          {t(`filters.${row.original.role}`)}
                     </Badge>
                ),
@@ -125,7 +117,16 @@ export function UsersTable() {
                     <DataTableColumnHeader column={column} title={t("columns.status")} />
                ),
                cell: ({ row }) => (
-                    <Badge variant={statusVariant[row.original.status]} className="capitalize">
+                    <Badge
+                         variant="secondary"
+                         className={
+                              row.original.status === "active"
+                                   ? "bg-emerald-100 text-emerald-700"
+                                   : row.original.status === "inactive"
+                                        ? "bg-amber-100 text-amber-700"
+                                        : "bg-rose-100 text-rose-700"
+                         }
+                    >
                          {t(`filters.${row.original.status}`)}
                     </Badge>
                ),
@@ -148,8 +149,11 @@ export function UsersTable() {
           // Actions
           {
                id: "actions",
+               header: ({ column }) => (
+                    <DataTableColumnHeader column={column} title={t("columns.actions")} />
+               ),
                cell: ({ row }) => <UserRowActions row={row} />,
-               size: 40,
+               size: 96,
           },
      ];
 
@@ -157,21 +161,25 @@ export function UsersTable() {
           {
                id: "select",
                header: ({ table }) => (
-                    <Checkbox
-                         checked={
-                              table.getIsAllPageRowsSelected() ||
-                              (table.getIsSomePageRowsSelected() && "indeterminate")
-                         }
-                         onCheckedChange={(val) => table.toggleAllPageRowsSelected(!!val)}
-                         aria-label={tCommon("selectAll")}
-                    />
+                    <div className="flex items-center justify-center">
+                         <Checkbox
+                              checked={
+                                   table.getIsAllPageRowsSelected() ||
+                                   (table.getIsSomePageRowsSelected() && "indeterminate")
+                              }
+                              onCheckedChange={(val) => table.toggleAllPageRowsSelected(!!val)}
+                              aria-label={tCommon("selectAll")}
+                         />
+                    </div>
                ),
                cell: ({ row }) => (
-                    <Checkbox
-                         checked={row.getIsSelected()}
-                         onCheckedChange={(val) => row.toggleSelected(!!val)}
-                         aria-label={tCommon("selectRow")}
-                    />
+                    <div className="flex items-center justify-center">
+                         <Checkbox
+                              checked={row.getIsSelected()}
+                              onCheckedChange={(val) => row.toggleSelected(!!val)}
+                              aria-label={tCommon("selectRow")}
+                         />
+                    </div>
                ),
                enableSorting: false,
                enableHiding: false,
@@ -246,278 +254,260 @@ export function UsersTable() {
      return (
           <div className="space-y-4 pt-2">
 
-               <Tabs
-                    value={tableMode}
-                    onValueChange={(value) => {
-                         const nextMode = value as "selection" | "expandable";
-                         router.push(
-                              `/${locale}/${nextMode === "selection" ? "users-selection" : "users-expandable"}`
-                         );
-                    }}
+               <div
+                    dir={direction}
+                    className="flex flex-col gap-3  p-4  sm:flex-row sm:items-center sm:justify-between sm:p-6"
                >
-                    <TabsList>
-                         <TabsTrigger value="selection">
-                              {t("modes.selectable")}
-                         </TabsTrigger>
-                         <TabsTrigger value="expandable">
-                              {t("modes.expandable")}
-                         </TabsTrigger>
-                    </TabsList>
-
-                    <div
-                         dir={direction}
-                         className="flex flex-col gap-3 p-4 sm:flex-row sm:items-center sm:justify-between"
-                    >
-                         <div className="text-start">
-                              <h1 className="text-2xl font-semibold">{t("title")}</h1>
-                              <p className="text-muted-foreground text-sm">
-                                   {t("description")}
-                              </p>
-                         </div>
-
-                         <div className="flex items-center gap-2">
-                              <PopoverPrimitive.Root open={createOpen} onOpenChange={setCreateOpen}>
-                                   <PopoverPrimitive.Trigger asChild>
-                                        <Button variant="default" className="gap-2">
-                                             <Plus className="h-4 w-4" />
-                                             {t("actions.createUser")}
-                                        </Button>
-                                   </PopoverPrimitive.Trigger>
-                                   <PopoverPrimitive.Portal>
-                                        <PopoverPrimitive.Content
-                                             dir={direction}
-                                             align="end"
-                                             sideOffset={8}
-                                             className="z-50 w-[320px] rounded-md border bg-popover p-3 text-popover-foreground shadow-md outline-hidden"
-                                        >
-                                             <div className="flex flex-col gap-3 text-start">
-                                                  <div className="grid gap-1.5">
-                                                       <span className="text-xs text-muted-foreground">
-                                                            {t("columns.name")}
-                                                       </span>
-                                                       <Input
-                                                            value={createName}
-                                                            onChange={(e) => setCreateName(e.target.value)}
-                                                            autoComplete="name"
-                                                       />
-                                                  </div>
-
-                                                  <div className="grid gap-1.5">
-                                                       <span className="text-xs text-muted-foreground">
-                                                            {t("columns.email")}
-                                                       </span>
-                                                       <Input
-                                                            value={createEmail}
-                                                            onChange={(e) => setCreateEmail(e.target.value)}
-                                                            autoComplete="email"
-                                                            inputMode="email"
-                                                       />
-                                                  </div>
-
-                                                  <div className="grid grid-cols-2 gap-2">
-                                                       <div className="grid gap-1.5">
-                                                            <span className="text-xs text-muted-foreground">
-                                                                 {t("filters.role")}
-                                                            </span>
-                                                            <Select
-                                                                 value={createRole}
-                                                                 onValueChange={(val) =>
-                                                                      setCreateRole(val as UserRole)
-                                                                 }
-                                                            >
-                                                                 <SelectTrigger className="w-full">
-                                                                      <SelectValue />
-                                                                 </SelectTrigger>
-                                                                 <SelectContent>
-                                                                      <SelectItem value="admin">
-                                                                           {t("filters.admin")}
-                                                                      </SelectItem>
-                                                                      <SelectItem value="moderator">
-                                                                           {t("filters.moderator")}
-                                                                      </SelectItem>
-                                                                      <SelectItem value="user">
-                                                                           {t("filters.user")}
-                                                                      </SelectItem>
-                                                                 </SelectContent>
-                                                            </Select>
-                                                       </div>
-
-                                                       <div className="grid gap-1.5">
-                                                            <span className="text-xs text-muted-foreground">
-                                                                 {t("filters.status")}
-                                                            </span>
-                                                            <Select
-                                                                 value={createStatus}
-                                                                 onValueChange={(val) =>
-                                                                      setCreateStatus(val as UserStatus)
-                                                                 }
-                                                            >
-                                                                 <SelectTrigger className="w-full">
-                                                                      <SelectValue />
-                                                                 </SelectTrigger>
-                                                                 <SelectContent>
-                                                                      <SelectItem value="active">
-                                                                           {t("filters.active")}
-                                                                      </SelectItem>
-                                                                      <SelectItem value="inactive">
-                                                                           {t("filters.inactive")}
-                                                                      </SelectItem>
-                                                                      <SelectItem value="banned">
-                                                                           {t("filters.banned")}
-                                                                      </SelectItem>
-                                                                 </SelectContent>
-                                                            </Select>
-                                                       </div>
-                                                  </div>
-
-                                                  <div className="flex items-center justify-end gap-2">
-                                                       <Button
-                                                            type="button"
-                                                            variant="ghost"
-                                                            size="sm"
-                                                            onClick={() => setCreateOpen(false)}
-                                                       >
-                                                            {tCommon("cancel")}
-                                                       </Button>
-                                                       <Button
-                                                            type="button"
-                                                            size="sm"
-                                                            className="gap-2"
-                                                            disabled={
-                                                                 createUserMutation.isPending ||
-                                                                 !createName.trim() ||
-                                                                 !createEmail.trim()
-                                                            }
-                                                            onClick={async () => {
-                                                                 try {
-                                                                      await createUserMutation.mutateAsync({
-                                                                           name: createName,
-                                                                           email: createEmail,
-                                                                           role: createRole,
-                                                                           status: createStatus,
-                                                                      });
-                                                                      setCreateName("");
-                                                                      setCreateEmail("");
-                                                                      setCreateRole("user");
-                                                                      setCreateStatus("active");
-                                                                      setCreateOpen(false);
-                                                                      setPagination((prev) => ({
-                                                                           ...prev,
-                                                                           pageIndex: 0,
-                                                                      }));
-                                                                 } catch {
-                                                                 }
-                                                            }}
-                                                       >
-                                                            {tCommon("create")}
-                                                       </Button>
-                                                  </div>
-                                             </div>
-                                        </PopoverPrimitive.Content>
-                                   </PopoverPrimitive.Portal>
-                              </PopoverPrimitive.Root>
-
-                              <Button
-                                   variant="outline"
-                                   className="gap-2"
-                                   disabled={isDownloading}
-                                   onClick={async () => {
-                                        setIsDownloading(true);
-                                        try {
-                                             const res = await fetchUsers({
-                                                  page: 1,
-                                                  perPage: 100000,
-                                                  search,
-                                                  role,
-                                                  status,
-                                                  joinedDate,
-                                                  locale,
-                                             });
-
-                                             const escapeCsvValue = (value: string) => {
-                                                  const normalized = value ?? "";
-                                                  if (/[",\r\n]/.test(normalized)) {
-                                                       return `"${normalized.replace(/"/g, '""')}"`;
-                                                  }
-                                                  return normalized;
-                                             };
-
-                                             const headers = [
-                                                  "id",
-                                                  t("columns.name"),
-                                                  t("columns.email"),
-                                                  t("columns.role"),
-                                                  t("columns.status"),
-                                                  t("columns.createdAt"),
-                                             ];
-
-                                             const lines = [
-                                                  headers.map(escapeCsvValue).join(","),
-                                                  ...res.data.map((u) =>
-                                                       [
-                                                            u.id,
-                                                            u.name,
-                                                            u.email,
-                                                            t(`filters.${u.role}`),
-                                                            t(`filters.${u.status}`),
-                                                            formatLongDate(u.createdAt, locale),
-                                                       ]
-                                                            .map(escapeCsvValue)
-                                                            .join(",")
-                                                  ),
-                                             ];
-
-                                             const csv = `\uFEFF${lines.join("\r\n")}`;
-                                             const blob = new Blob([csv], {
-                                                  type: "text/csv;charset=utf-8",
-                                             });
-                                             const url = URL.createObjectURL(blob);
-
-                                             const a = document.createElement("a");
-                                             a.href = url;
-                                             a.download = `users-${locale}.csv`;
-                                             document.body.appendChild(a);
-                                             a.click();
-                                             a.remove();
-                                             URL.revokeObjectURL(url);
-                                        } catch {
-                                        } finally {
-                                             setIsDownloading(false);
-                                        }
-                                   }}
-                              >
-                                   <Download className="h-4 w-4" />
-                                   {t("actions.downloadCsv")}
-                              </Button>
-                         </div>
+                    <div className="text-start">
+                         <h1 className="text-2xl font-semibold">{t("title")}</h1>
+                         <p className="text-muted-foreground text-sm">
+                              {t("description")}
+                         </p>
                     </div>
 
+                    <div className="flex items-center gap-2">
+                         <PopoverPrimitive.Root open={createOpen} onOpenChange={setCreateOpen}>
+                              <PopoverPrimitive.Trigger asChild>
+                                   <Button
+                                        variant="default"
+                                        size="lg"
+                                        className="gap-2 rounded-md bg-blue-600 px-4 hover:bg-blue-700"
+                                   >
+                                        <Plus className="h-4 w-4" />
+                                        {t("actions.createUser")}
+                                   </Button>
+                              </PopoverPrimitive.Trigger>
+                              <PopoverPrimitive.Portal>
+                                   <PopoverPrimitive.Content
+                                        dir={direction}
+                                        align="end"
+                                        sideOffset={8}
+                                        className="z-50 w-[320px] rounded-md border bg-popover p-3 text-popover-foreground shadow-md outline-hidden"
+                                   >
+                                        <div className="flex flex-col gap-3 text-start">
+                                             <div className="grid gap-1.5">
+                                                  <span className="text-xs text-muted-foreground">
+                                                       {t("columns.name")}
+                                                  </span>
+                                                  <Input
+                                                       value={createName}
+                                                       onChange={(e) => setCreateName(e.target.value)}
+                                                       autoComplete="name"
+                                                  />
+                                             </div>
 
-                    <TabsContent value="selection" className="mt-0 p-4">
+                                             <div className="grid gap-1.5">
+                                                  <span className="text-xs text-muted-foreground">
+                                                       {t("columns.email")}
+                                                  </span>
+                                                  <Input
+                                                       value={createEmail}
+                                                       onChange={(e) => setCreateEmail(e.target.value)}
+                                                       autoComplete="email"
+                                                       inputMode="email"
+                                                  />
+                                             </div>
+
+                                             <div className="grid grid-cols-2 gap-2">
+                                                  <div className="grid gap-1.5">
+                                                       <span className="text-xs text-muted-foreground">
+                                                            {t("filters.role")}
+                                                       </span>
+                                                       <Select
+                                                            value={createRole}
+                                                            onValueChange={(val) =>
+                                                                 setCreateRole(val as UserRole)
+                                                            }
+                                                       >
+                                                            <SelectTrigger className="w-full">
+                                                                 <SelectValue />
+                                                            </SelectTrigger>
+                                                            <SelectContent>
+                                                                 <SelectItem value="admin">
+                                                                      {t("filters.admin")}
+                                                                 </SelectItem>
+                                                                 <SelectItem value="moderator">
+                                                                      {t("filters.moderator")}
+                                                                 </SelectItem>
+                                                                 <SelectItem value="user">
+                                                                      {t("filters.user")}
+                                                                 </SelectItem>
+                                                            </SelectContent>
+                                                       </Select>
+                                                  </div>
+
+                                                  <div className="grid gap-1.5">
+                                                       <span className="text-xs text-muted-foreground">
+                                                            {t("filters.status")}
+                                                       </span>
+                                                       <Select
+                                                            value={createStatus}
+                                                            onValueChange={(val) =>
+                                                                 setCreateStatus(val as UserStatus)
+                                                            }
+                                                       >
+                                                            <SelectTrigger className="w-full">
+                                                                 <SelectValue />
+                                                            </SelectTrigger>
+                                                            <SelectContent>
+                                                                 <SelectItem value="active">
+                                                                      {t("filters.active")}
+                                                                 </SelectItem>
+                                                                 <SelectItem value="inactive">
+                                                                      {t("filters.inactive")}
+                                                                 </SelectItem>
+                                                                 <SelectItem value="banned">
+                                                                      {t("filters.banned")}
+                                                                 </SelectItem>
+                                                            </SelectContent>
+                                                       </Select>
+                                                  </div>
+                                             </div>
+
+                                             <div className="flex items-center justify-end gap-2">
+                                                  <Button
+                                                       type="button"
+                                                       variant="ghost"
+                                                       size="sm"
+                                                       onClick={() => setCreateOpen(false)}
+                                                  >
+                                                       {tCommon("cancel")}
+                                                  </Button>
+                                                  <Button
+                                                       type="button"
+                                                       size="sm"
+                                                       className="gap-2 bg-blue-600 hover:bg-blue-700"
+                                                       disabled={
+                                                            createUserMutation.isPending ||
+                                                            !createName.trim() ||
+                                                            !createEmail.trim()
+                                                       }
+                                                       onClick={async () => {
+                                                            try {
+                                                                 await createUserMutation.mutateAsync({
+                                                                      name: createName,
+                                                                      email: createEmail,
+                                                                      role: createRole,
+                                                                      status: createStatus,
+                                                                 });
+                                                                 setCreateName("");
+                                                                 setCreateEmail("");
+                                                                 setCreateRole("user");
+                                                                 setCreateStatus("active");
+                                                                 setCreateOpen(false);
+                                                                 setPagination((prev) => ({
+                                                                      ...prev,
+                                                                      pageIndex: 0,
+                                                                 }));
+                                                            } catch {
+                                                            }
+                                                       }}
+                                                  >
+                                                       {tCommon("create")}
+                                                  </Button>
+                                             </div>
+                                        </div>
+                                   </PopoverPrimitive.Content>
+                              </PopoverPrimitive.Portal>
+                         </PopoverPrimitive.Root>
+
+                         <Button
+                              variant="outline"
+                              size="lg"
+                              className="gap-2 rounded-md px-4"
+                              disabled={isDownloading}
+                              onClick={async () => {
+                                   setIsDownloading(true);
+                                   try {
+                                        const res = await fetchUsers({
+                                             page: 1,
+                                             perPage: 100000,
+                                             search,
+                                             role,
+                                             status,
+                                             joinedDate,
+                                             locale,
+                                        });
+
+                                        const escapeCsvValue = (value: string) => {
+                                             const normalized = value ?? "";
+                                             if (/[",\r\n]/.test(normalized)) {
+                                                  return `"${normalized.replace(/"/g, '""')}"`;
+                                             }
+                                             return normalized;
+                                        };
+
+                                        const headers = [
+                                             "id",
+                                             t("columns.name"),
+                                             t("columns.email"),
+                                             t("columns.role"),
+                                             t("columns.status"),
+                                             t("columns.createdAt"),
+                                        ];
+
+                                        const lines = [
+                                             headers.map(escapeCsvValue).join(","),
+                                             ...res.data.map((u) =>
+                                                  [
+                                                       u.id,
+                                                       u.name,
+                                                       u.email,
+                                                       t(`filters.${u.role}`),
+                                                       t(`filters.${u.status}`),
+                                                       formatLongDate(u.createdAt, locale),
+                                                  ]
+                                                       .map(escapeCsvValue)
+                                                       .join(",")
+                                             ),
+                                        ];
+
+                                        const csv = `\uFEFF${lines.join("\r\n")}`;
+                                        const blob = new Blob([csv], {
+                                             type: "text/csv;charset=utf-8",
+                                        });
+                                        const url = URL.createObjectURL(blob);
+
+                                        const a = document.createElement("a");
+                                        a.href = url;
+                                        a.download = `users-${locale}.csv`;
+                                        document.body.appendChild(a);
+                                        a.click();
+                                        a.remove();
+                                        URL.revokeObjectURL(url);
+                                   } catch {
+                                   } finally {
+                                        setIsDownloading(false);
+                                   }
+                              }}
+                         >
+                              <Download className="h-4 w-4" />
+                              {t("actions.downloadCsv")}
+                         </Button>
+                    </div>
+               </div>
+
+
+               {tableMode === "selection" ? (
+                    <div className="mt-4">
                          <DataTable
                               columns={selectionColumns}
                               {...sharedTableProps}
                               rowSelection={rowSelection}
                               onRowSelectionChange={setRowSelection}
                          />
-                    </TabsContent>
-
-
-
-                    <TabsContent value="expandable" className="mt-0 p-4">
+                    </div>
+               ) : (
+                    <div className="mt-4">
                          <DataTable
                               columns={activeColumns}
                               {...sharedTableProps}
                               expanded={expanded}
                               onExpandedChange={setExpanded}
-                              renderExpandedRow={(user) => (
-                                   <UserExpandedRow userId={user.id} />
-                              )}
+                              renderExpandedRow={(user) => <UserExpandedRow userId={user.id} />}
                          />
-                    </TabsContent>
-               </Tabs >
-
-
-          </div >
+                    </div>
+               )}
+          </div>
      );
 }
