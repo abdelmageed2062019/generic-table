@@ -77,6 +77,11 @@
       "userUpdated": "User updated",
       "updateError": "Failed to update user"
     },
+    "validation": {
+      "required": "This field is required",
+      "nameMin": "Name must be at least {min} characters",
+      "emailInvalid": "Enter a valid email address"
+    },
     "modal": {
       "viewTitle": "User details",
       "editTitle": "Edit user"

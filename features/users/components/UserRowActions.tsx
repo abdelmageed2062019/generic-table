@@ -56,7 +56,10 @@ export function UserRowActions({ row }: UserRowActionsProps) {
                     open={open}
                     onOpenChange={(nextOpen) => {
                          setOpen(nextOpen);
-                         if (!nextOpen) setMode("view");
+                         if (!nextOpen) {
+                              setMode("view");
+                              setSelectedUser(null);
+                         }
                     }}
                     user={selectedUser}
                     mode={mode}

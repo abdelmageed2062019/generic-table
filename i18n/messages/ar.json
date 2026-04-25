@@ -77,6 +77,11 @@
       "userUpdated": "تم تحديث المستخدم",
       "updateError": "فشل تحديث المستخدم"
     },
+    "validation": {
+      "required": "هذا الحقل مطلوب",
+      "nameMin": "يجب أن يكون الاسم {min} أحرف على الأقل",
+      "emailInvalid": "أدخل بريدًا إلكترونيًا صالحًا"
+    },
     "modal": {
       "viewTitle": "تفاصيل المستخدم",
       "editTitle": "تعديل المستخدم"

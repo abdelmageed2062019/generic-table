@@ -1,24 +1,18 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import { Dialog as DialogPrimitive } from "radix-ui";
+import { useForm } from "react-hook-form";
 import { X } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import {
-     Select,
-     SelectContent,
-     SelectItem,
-     SelectTrigger,
-     SelectValue,
-} from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
 import { useDirection } from "@/components/ui/direction";
 import { cn } from "@/lib/utils";
 import { formatLongDate } from "@/lib/formatters";
 import { useUpdateUser } from "../hooks/useUsers";
-import type { User, UserRole, UserStatus } from "../types/user.types";
+import type { User } from "../types/user.types";
+import { UserFormFields, type UserFormValues } from "./UserFormFields";
 
 type Mode = "view" | "edit";
 
@@ -44,20 +38,20 @@ export function UserDetailsModal({
 
      const updateUserMutation = useUpdateUser();
 
-     const [name, setName] = useState(() => user?.name ?? "");
-     const [email, setEmail] = useState(() => user?.email ?? "");
-     const [role, setRole] = useState<UserRole>(() => user?.role ?? "user");
-     const [status, setStatus] = useState<UserStatus>(() => user?.status ?? "active");
+     const editDefaultValues: UserFormValues = useMemo(
+          () => ({
+               name: user?.name ?? "",
+               email: user?.email ?? "",
+               role: user?.role ?? "user",
+               status: user?.status ?? "active",
+          }),
+          [user]
+     );
 
-     const isDirty = useMemo(() => {
-          if (!user) return false;
-          return (
-               name.trim() !== user.name ||
-               email.trim() !== user.email ||
-               role !== user.role ||
-               status !== user.status
-          );
-     }, [email, name, role, status, user]);
+     const editForm = useForm<UserFormValues>({
+          defaultValues: editDefaultValues,
+          mode: "onChange",
+     });
 
      const title = mode === "edit" ? t("modal.editTitle") : t("modal.viewTitle");
 
@@ -155,107 +149,59 @@ export function UserDetailsModal({
                                    </div>
                               </div>
                          ) : (
-                              <div className="mt-5 grid gap-4">
-                                   <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-                                        <div className="grid gap-1.5">
-                                             <span className="text-xs text-muted-foreground">
-                                                  {t("columns.name")}
-                                             </span>
-                                             <Input value={name} onChange={(e) => setName(e.target.value)} />
-                                        </div>
-                                        <div className="grid gap-1.5">
-                                             <span className="text-xs text-muted-foreground">
-                                                  {t("columns.email")}
-                                             </span>
-                                             <Input
-                                                  value={email}
-                                                  onChange={(e) => setEmail(e.target.value)}
-                                                  inputMode="email"
-                                                  autoComplete="email"
-                                             />
-                                        </div>
-                                        <div className="grid gap-1.5">
-                                             <span className="text-xs text-muted-foreground">
-                                                  {t("columns.role")}
-                                             </span>
-                                             <Select
-                                                  value={role}
-                                                  onValueChange={(val) => setRole(val as UserRole)}
-                                             >
-                                                  <SelectTrigger className="h-9 w-full bg-background">
-                                                       <SelectValue />
-                                                  </SelectTrigger>
-                                                  <SelectContent>
-                                                       <SelectItem value="admin">{t("filters.admin")}</SelectItem>
-                                                       <SelectItem value="moderator">
-                                                            {t("filters.moderator")}
-                                                       </SelectItem>
-                                                       <SelectItem value="user">{t("filters.user")}</SelectItem>
-                                                  </SelectContent>
-                                             </Select>
-                                        </div>
-                                        <div className="grid gap-1.5">
-                                             <span className="text-xs text-muted-foreground">
-                                                  {t("columns.status")}
-                                             </span>
-                                             <Select
-                                                  value={status}
-                                                  onValueChange={(val) => setStatus(val as UserStatus)}
-                                             >
-                                                  <SelectTrigger className="h-9 w-full bg-background">
-                                                       <SelectValue />
-                                                  </SelectTrigger>
-                                                  <SelectContent>
-                                                       <SelectItem value="active">{t("filters.active")}</SelectItem>
-                                                       <SelectItem value="inactive">
-                                                            {t("filters.inactive")}
-                                                       </SelectItem>
-                                                       <SelectItem value="banned">{t("filters.banned")}</SelectItem>
-                                                  </SelectContent>
-                                             </Select>
-                                        </div>
-                                   </div>
+                              <form
+                                   className="mt-5 grid gap-4"
+                                   onSubmit={editForm.handleSubmit(async (values) => {
+                                        if (!user) return;
+                                        try {
+                                             await updateUserMutation.mutateAsync({
+                                                  id: user.id,
+                                                  payload: {
+                                                       name: values.name.trim(),
+                                                       email: values.email.trim(),
+                                                       role: values.role,
+                                                       status: values.status,
+                                                  },
+                                             });
+                                             onModeChange("view");
+                                             onOpenChange(false);
+                                        } catch {
+                                        }
+                                   })}
+                              >
+                                   <UserFormFields
+                                        register={editForm.register}
+                                        control={editForm.control}
+                                        errors={editForm.formState.errors}
+                                   />
 
                                    <div className="flex items-center justify-end gap-2">
                                         <Button
                                              variant="ghost"
                                              size="sm"
-                                             onClick={() => onModeChange("view")}
+                                             type="button"
+                                             onClick={() => {
+                                                  editForm.reset(editDefaultValues);
+                                                  onModeChange("view");
+                                             }}
                                              disabled={updateUserMutation.isPending}
                                         >
                                              {tCommon("cancel")}
                                         </Button>
                                         <Button
                                              size="sm"
+                                             type="submit"
                                              className="rounded-md bg-blue-600 hover:bg-blue-700"
                                              disabled={
                                                   updateUserMutation.isPending ||
-                                                  !name.trim() ||
-                                                  !email.trim() ||
-                                                  !isDirty
+                                                  !editForm.formState.isValid ||
+                                                  !editForm.formState.isDirty
                                              }
-                                             onClick={async () => {
-                                                  if (!user) return;
-                                                  try {
-                                                       await updateUserMutation.mutateAsync({
-                                                            id: user.id,
-                                                            payload: {
-                                                                 name: name.trim(),
-                                                                 email: email.trim(),
-                                                                 role,
-                                                                 status,
-                                                            },
-                                                       });
-                                                       onModeChange("view");
-                                                       onOpenChange(false);
-                                                  } catch {
-                                                  }
-                                             }}
                                         >
                                              {tCommon("save")}
                                         </Button>
                                    </div>
-                              </div>
+                              </form>
                          )}
                     </DialogPrimitive.Content>
                </DialogPrimitive.Portal>

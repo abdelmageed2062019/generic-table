@@ -4,24 +4,18 @@ import { useState } from "react";
 import { ColumnDef, RowSelectionState, ExpandedState } from "@tanstack/react-table";
 import { useLocale, useTranslations } from "next-intl";
 import { usePathname } from "next/navigation";
+import { useForm } from "react-hook-form";
 import { ChevronDown, ChevronRight, Download, Plus } from "lucide-react";
 import { Popover as PopoverPrimitive } from "radix-ui";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { DataTable, DataTableColumnHeader } from "@/components/data-table";
 import { useDirection } from "@/components/ui/direction";
-import {
-     Select,
-     SelectContent,
-     SelectItem,
-     SelectTrigger,
-     SelectValue,
-} from "@/components/ui/select";
 import { UsersFilters } from "./UsersFilters";
 import { UserRowActions } from "./UserRowActions";
 import { UserExpandedRow } from "./UserExpandedRow";
+import { UserFormFields, type UserFormValues } from "./UserFormFields";
 import { fetchUsers } from "../api/users.api";
 import { useCreateUser, useUsers } from "../hooks/useUsers";
 import type { User, UserRole, UserStatus } from "../types/user.types";
@@ -47,11 +41,19 @@ export function UsersTable() {
 
      const createUserMutation = useCreateUser();
      const [createOpen, setCreateOpen] = useState(false);
-     const [createName, setCreateName] = useState("");
-     const [createEmail, setCreateEmail] = useState("");
-     const [createRole, setCreateRole] = useState<UserRole>("user");
-     const [createStatus, setCreateStatus] = useState<UserStatus>("active");
      const [isDownloading, setIsDownloading] = useState(false);
+
+     const createDefaultValues: UserFormValues = {
+          name: "",
+          email: "",
+          role: "user",
+          status: "active",
+     };
+
+     const createForm = useForm<UserFormValues>({
+          defaultValues: createDefaultValues,
+          mode: "onChange",
+     });
 
      const { data, isLoading } = useUsers({
           page: pagination.pageIndex + 1,
@@ -266,7 +268,13 @@ export function UsersTable() {
                     </div>
 
                     <div className="flex items-center gap-2">
-                         <PopoverPrimitive.Root open={createOpen} onOpenChange={setCreateOpen}>
+                         <PopoverPrimitive.Root
+                              open={createOpen}
+                              onOpenChange={(nextOpen) => {
+                                   setCreateOpen(nextOpen);
+                                   if (!nextOpen) createForm.reset(createDefaultValues);
+                              }}
+                         >
                               <PopoverPrimitive.Trigger asChild>
                                    <Button
                                         variant="default"
@@ -284,85 +292,31 @@ export function UsersTable() {
                                         sideOffset={8}
                                         className="z-50 w-[320px] rounded-md border bg-popover p-3 text-popover-foreground shadow-md outline-hidden"
                                    >
-                                        <div className="flex flex-col gap-3 text-start">
-                                             <div className="grid gap-1.5">
-                                                  <span className="text-xs text-muted-foreground">
-                                                       {t("columns.name")}
-                                                  </span>
-                                                  <Input
-                                                       value={createName}
-                                                       onChange={(e) => setCreateName(e.target.value)}
-                                                       autoComplete="name"
-                                                  />
-                                             </div>
-
-                                             <div className="grid gap-1.5">
-                                                  <span className="text-xs text-muted-foreground">
-                                                       {t("columns.email")}
-                                                  </span>
-                                                  <Input
-                                                       value={createEmail}
-                                                       onChange={(e) => setCreateEmail(e.target.value)}
-                                                       autoComplete="email"
-                                                       inputMode="email"
-                                                  />
-                                             </div>
-
-                                             <div className="grid grid-cols-2 gap-2">
-                                                  <div className="grid gap-1.5">
-                                                       <span className="text-xs text-muted-foreground">
-                                                            {t("filters.role")}
-                                                       </span>
-                                                       <Select
-                                                            value={createRole}
-                                                            onValueChange={(val) =>
-                                                                 setCreateRole(val as UserRole)
-                                                            }
-                                                       >
-                                                            <SelectTrigger className="w-full">
-                                                                 <SelectValue />
-                                                            </SelectTrigger>
-                                                            <SelectContent>
-                                                                 <SelectItem value="admin">
-                                                                      {t("filters.admin")}
-                                                                 </SelectItem>
-                                                                 <SelectItem value="moderator">
-                                                                      {t("filters.moderator")}
-                                                                 </SelectItem>
-                                                                 <SelectItem value="user">
-                                                                      {t("filters.user")}
-                                                                 </SelectItem>
-                                                            </SelectContent>
-                                                       </Select>
-                                                  </div>
-
-                                                  <div className="grid gap-1.5">
-                                                       <span className="text-xs text-muted-foreground">
-                                                            {t("filters.status")}
-                                                       </span>
-                                                       <Select
-                                                            value={createStatus}
-                                                            onValueChange={(val) =>
-                                                                 setCreateStatus(val as UserStatus)
-                                                            }
-                                                       >
-                                                            <SelectTrigger className="w-full">
-                                                                 <SelectValue />
-                                                            </SelectTrigger>
-                                                            <SelectContent>
-                                                                 <SelectItem value="active">
-                                                                      {t("filters.active")}
-                                                                 </SelectItem>
-                                                                 <SelectItem value="inactive">
-                                                                      {t("filters.inactive")}
-                                                                 </SelectItem>
-                                                                 <SelectItem value="banned">
-                                                                      {t("filters.banned")}
-                                                                 </SelectItem>
-                                                            </SelectContent>
-                                                       </Select>
-                                                  </div>
-                                             </div>
+                                        <form
+                                             className="flex flex-col gap-3 text-start"
+                                             onSubmit={createForm.handleSubmit(async (values) => {
+                                                  try {
+                                                       await createUserMutation.mutateAsync({
+                                                            name: values.name.trim(),
+                                                            email: values.email.trim(),
+                                                            role: values.role,
+                                                            status: values.status,
+                                                       });
+                                                       createForm.reset(createDefaultValues);
+                                                       setCreateOpen(false);
+                                                       setPagination((prev) => ({
+                                                            ...prev,
+                                                            pageIndex: 0,
+                                                       }));
+                                                  } catch {
+                                                  }
+                                             })}
+                                        >
+                                             <UserFormFields
+                                                  register={createForm.register}
+                                                  control={createForm.control}
+                                                  errors={createForm.formState.errors}
+                                             />
 
                                              <div className="flex items-center justify-end gap-2">
                                                   <Button
@@ -370,43 +324,23 @@ export function UsersTable() {
                                                        variant="ghost"
                                                        size="sm"
                                                        onClick={() => setCreateOpen(false)}
+                                                       disabled={createUserMutation.isPending}
                                                   >
                                                        {tCommon("cancel")}
                                                   </Button>
                                                   <Button
-                                                       type="button"
+                                                       type="submit"
                                                        size="sm"
                                                        className="gap-2 bg-blue-600 hover:bg-blue-700"
                                                        disabled={
                                                             createUserMutation.isPending ||
-                                                            !createName.trim() ||
-                                                            !createEmail.trim()
+                                                            !createForm.formState.isValid
                                                        }
-                                                       onClick={async () => {
-                                                            try {
-                                                                 await createUserMutation.mutateAsync({
-                                                                      name: createName,
-                                                                      email: createEmail,
-                                                                      role: createRole,
-                                                                      status: createStatus,
-                                                                 });
-                                                                 setCreateName("");
-                                                                 setCreateEmail("");
-                                                                 setCreateRole("user");
-                                                                 setCreateStatus("active");
-                                                                 setCreateOpen(false);
-                                                                 setPagination((prev) => ({
-                                                                      ...prev,
-                                                                      pageIndex: 0,
-                                                                 }));
-                                                            } catch {
-                                                            }
-                                                       }}
                                                   >
                                                        {tCommon("create")}
                                                   </Button>
                                              </div>
-                                        </div>
+                                        </form>
                                    </PopoverPrimitive.Content>
                               </PopoverPrimitive.Portal>
                          </PopoverPrimitive.Root>
