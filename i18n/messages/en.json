@@ -3,6 +3,8 @@
     "search": "Search",
     "filter": "Filter",
     "reset": "Reset",
+    "cancel": "Cancel",
+    "create": "Create",
     "actions": "Actions",
     "edit": "Edit",
     "delete": "Delete",
@@ -58,6 +60,8 @@
       "noEntities": "No linked entities found"
     },
     "actions": {
+      "createUser": "Create user",
+      "downloadCsv": "Download CSV",
       "editUser": "Edit user",
       "deleteUser": "Delete user",
       "viewProfile": "View profile"

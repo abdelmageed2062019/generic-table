@@ -1,6 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { fetchUsers, deleteUser } from "../api/users.api";
-import type { UsersParams } from "../types/user.types";
+import { fetchUsers, deleteUser, createUser } from "../api/users.api";
+import type { CreateUserInput, UsersParams } from "../types/user.types";
 
 // Query key factory — keeps keys consistent across the app
 export const usersKeys = {
@@ -23,6 +23,18 @@ export function useDeleteUser() {
 
      return useMutation({
           mutationFn: (id: string) => deleteUser(id),
+          onSuccess: () => {
+               queryClient.invalidateQueries({ queryKey: usersKeys.all });
+          },
+     });
+}
+
+// Creates a user and invalidates the cache so the table refreshes    
+export function useCreateUser() {
+     const queryClient = useQueryClient();
+
+     return useMutation({
+          mutationFn: (payload: CreateUserInput) => createUser(payload),
           onSuccess: () => {
                queryClient.invalidateQueries({ queryKey: usersKeys.all });
           },

@@ -245,6 +245,16 @@
           "lastActive": "6 hrs ago"
         }
       ]
+    },
+    {
+      "id": "USR-1013",
+      "name": "Abdelmageed Hamdi",
+      "email": "abdelmageedhamdi@gmail.com",
+      "role": "user",
+      "status": "active",
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=USR-1013",
+      "createdAt": "2026-04-25T11:55:44.178Z",
+      "linkedEntities": []
     }
   ]
 }

@@ -3,6 +3,8 @@
     "search": "بحث",
     "filter": "تصفية",
     "reset": "إعادة تعيين",
+    "cancel": "إلغاء",
+    "create": "إنشاء",
     "actions": "إجراءات",
     "edit": "تعديل",
     "delete": "حذف",
@@ -58,6 +60,8 @@
       "noEntities": "لا توجد كيانات مرتبطة"
     },
     "actions": {
+      "createUser": "إضافة مستخدم",
+      "downloadCsv": "تنزيل CSV",
       "editUser": "تعديل المستخدم",
       "deleteUser": "حذف المستخدم",
       "viewProfile": "عرض الملف الشخصي"

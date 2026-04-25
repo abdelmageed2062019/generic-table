@@ -1,5 +1,7 @@
 import { notFound } from "next/navigation";
+import Link from "next/link";
 import { getMessages, setRequestLocale } from "next-intl/server";
+import { Database } from "lucide-react";
 import { locales, localeConfig, type Locale } from "../../i18n/config";
 import { QueryProvider } from "../../providers/QueryProvider";
 import { I18nProvider } from "../../providers/I18nProvider";
@@ -39,7 +41,10 @@ export default async function LocaleLayout({ children, params }: Props) {
                          <header className="border-b bg-card">
                               <div className="container mx-auto flex h-14 items-center justify-between px-4">
                                    <nav className="flex items-center gap-6">
-                                        <span className="font-semibold text-lg">DataApp</span>
+                                        <Link href={`/${locale}`} className="inline-flex items-center">
+                                             <Database className="h-5 w-5" aria-hidden />
+                                             <span className="sr-only">DataApp</span>
+                                        </Link>
                                    </nav>
                                    <LanguageSwitcher />
                               </div>

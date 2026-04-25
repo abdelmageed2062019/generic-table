@@ -11,7 +11,6 @@ import {
      ChevronsRight,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useDirection } from "@/components/ui/direction";
 import {
      Select,
      SelectContent,
@@ -32,7 +31,6 @@ export function DataTablePagination<TData>({
      const locale = useLocale();
      const t = useTranslations("pagination");
      const tCommon = useTranslations("common");
-     const direction = useDirection();
 
      const { pageIndex, pageSize } = table.getState().pagination;
      const selectedCount = table.getFilteredSelectedRowModel().rows.length;
@@ -41,11 +39,6 @@ export function DataTablePagination<TData>({
 
      const numberFormatter = useMemo(() => new Intl.NumberFormat(locale), [locale]);
      const formatNumber = (value: number) => numberFormatter.format(value);
-
-     const FirstPageIcon = direction === "rtl" ? ChevronsRight : ChevronsLeft;
-     const PreviousPageIcon = direction === "rtl" ? ChevronRight : ChevronLeft;
-     const NextPageIcon = direction === "rtl" ? ChevronLeft : ChevronRight;
-     const LastPageIcon = direction === "rtl" ? ChevronsLeft : ChevronsRight;
 
      return (
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4 px-2 py-4">
@@ -98,7 +91,7 @@ export function DataTablePagination<TData>({
                               disabled={!table.getCanPreviousPage()}
                               title={t("first")}
                          >
-                              <FirstPageIcon className="h-4 w-4" />
+                              <ChevronsLeft className="h-4 w-4" />
                          </Button>
                          <Button
                               variant="outline"
@@ -108,7 +101,7 @@ export function DataTablePagination<TData>({
                               disabled={!table.getCanPreviousPage()}
                               title={t("previous")}
                          >
-                              <PreviousPageIcon className="h-4 w-4" />
+                              <ChevronLeft className="h-4 w-4" />
                          </Button>
                          <Button
                               variant="outline"
@@ -118,7 +111,7 @@ export function DataTablePagination<TData>({
                               disabled={!table.getCanNextPage()}
                               title={t("next")}
                          >
-                              <NextPageIcon className="h-4 w-4" />
+                              <ChevronRight className="h-4 w-4" />
                          </Button>
                          <Button
                               variant="outline"
@@ -128,7 +121,7 @@ export function DataTablePagination<TData>({
                               disabled={!table.getCanNextPage()}
                               title={t("last")}
                          >
-                              <LastPageIcon className="h-4 w-4" />
+                              <ChevronsRight className="h-4 w-4" />
                          </Button>
                     </div>
                </div>
