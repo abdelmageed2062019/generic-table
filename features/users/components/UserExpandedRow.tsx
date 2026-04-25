@@ -71,7 +71,7 @@ export function UserExpandedRow({ userId }: UserExpandedRowProps) {
                                                   {entity.email}
                                              </TableCell>
                                              <TableCell className="text-sm">
-                                                  {entity.usageQueries.toLocaleString()}
+                                                  {entity.usageQueries.toLocaleString(locale)}
                                              </TableCell>
                                              <TableCell className="text-sm text-muted-foreground">
                                                   {entity.lastActive}

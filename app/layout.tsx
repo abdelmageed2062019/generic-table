@@ -18,13 +18,13 @@ export const metadata: Metadata = {
      description: "Reusable data table with localization",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
      children,
 }: {
      children: React.ReactNode;
 }) {
      return (
-          <html lang="en" suppressHydrationWarning>
+          <html suppressHydrationWarning>
                <body className={`${roboto.variable} ${cairo.variable}`}>{children}</body>
           </html>
      );

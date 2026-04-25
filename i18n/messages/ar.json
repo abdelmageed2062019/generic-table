@@ -9,6 +9,9 @@
     "view": "عرض",
     "loading": "جاري التحميل...",
     "noResults": "لا توجد نتائج",
+    "selectAll": "تحديد الكل",
+    "selectRow": "تحديد الصف",
+    "toggleExpandedRow": "تبديل توسيع الصف",
     "selected": "تم تحديد {count} من {total} صف"
   },
   "pagination": {

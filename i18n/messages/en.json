@@ -9,6 +9,9 @@
     "view": "View",
     "loading": "Loading...",
     "noResults": "No results found",
+    "selectAll": "Select all",
+    "selectRow": "Select row",
+    "toggleExpandedRow": "Toggle expanded row",
     "selected": "{count} of {total} row(s) selected"
   },
   "pagination": {

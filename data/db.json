@@ -31,6 +31,7 @@
     {
       "id": "USR-1002",
       "name": "John Peterson",
+      "nameAr": "جون بيترسون",
       "email": "john.peterson@example.com",
       "role": "moderator",
       "status": "inactive",
@@ -40,6 +41,7 @@
         {
           "id": "USR-1002-ENT-1",
           "entity": "Notion Workspace Product",
+          "entityAr": "مساحة عمل نوشن للمنتج",
           "email": "john.notion@example.com",
           "usageQueries": 890,
           "lastActive": "1 day ago"
@@ -49,6 +51,7 @@
     {
       "id": "USR-1003",
       "name": "Sara Coleman",
+      "nameAr": "سارة كولمان",
       "email": "sara.coleman@example.com",
       "role": "user",
       "status": "banned",
@@ -87,6 +90,7 @@
     {
       "id": "USR-1005",
       "name": "Emily Brown",
+      "nameAr": "إيميلي براون",
       "email": "emily.brown@example.com",
       "role": "moderator",
       "status": "active",
@@ -96,6 +100,7 @@
         {
           "id": "USR-1005-ENT-1",
           "entity": "Figma Team Design",
+          "entityAr": "فريق فيجما للتصميم",
           "email": "emily.figma@example.com",
           "usageQueries": 1540,
           "lastActive": "3 hrs ago"
@@ -105,6 +110,7 @@
     {
       "id": "USR-1006",
       "name": "David Green",
+      "nameAr": "ديفيد غرين",
       "email": "david.green@example.com",
       "role": "user",
       "status": "inactive",
@@ -114,6 +120,7 @@
         {
           "id": "USR-1006-ENT-1",
           "entity": "GitHub Organization Dev",
+          "entityAr": "منظمة جيتهاب للتطوير",
           "email": "david.github@example.com",
           "usageQueries": 980,
           "lastActive": "2 days ago"
@@ -123,6 +130,7 @@
     {
       "id": "USR-1007",
       "name": "Nora Ali",
+      "nameAr": "نورا علي",
       "email": "nora.ali@example.com",
       "role": "admin",
       "status": "active",
@@ -132,6 +140,7 @@
         {
           "id": "USR-1007-ENT-1",
           "entity": "Internal Tool CMS",
+          "entityAr": "نظام إدارة المحتوى للأداة الداخلية",
           "email": "nora.cms@example.com",
           "usageQueries": 3210,
           "lastActive": "5 hrs ago"
@@ -139,6 +148,7 @@
         {
           "id": "USR-1007-ENT-2",
           "entity": "Analytics Workspace",
+          "entityAr": "مساحة عمل التحليلات",
           "email": "nora.analytics@example.com",
           "usageQueries": 1875,
           "lastActive": "1 day ago"
@@ -148,6 +158,7 @@
     {
       "id": "USR-1008",
       "name": "Kevin Lopez",
+      "nameAr": "كيفن لوبيز",
       "email": "kevin.lopez@example.com",
       "role": "moderator",
       "status": "banned",
@@ -158,6 +169,7 @@
     {
       "id": "USR-1009",
       "name": "Fatima Noor",
+      "nameAr": "فاطمة نور",
       "email": "fatima.noor@example.com",
       "role": "user",
       "status": "active",
@@ -167,6 +179,7 @@
         {
           "id": "USR-1009-ENT-1",
           "entity": "Customer Portal Beta",
+          "entityAr": "بوابة العملاء (بيتا)",
           "email": "fatima.portal@example.com",
           "usageQueries": 1120,
           "lastActive": "2 hrs ago"
@@ -176,6 +189,7 @@
     {
       "id": "USR-1010",
       "name": "Chris Evans",
+      "nameAr": "كريس إيفانز",
       "email": "chris.evans@example.com",
       "role": "admin",
       "status": "inactive",
@@ -185,6 +199,7 @@
         {
           "id": "USR-1010-ENT-1",
           "entity": "Billing Dashboard",
+          "entityAr": "لوحة معلومات الفوترة",
           "email": "chris.billing@example.com",
           "usageQueries": 740,
           "lastActive": "3 days ago"
@@ -194,6 +209,7 @@
     {
       "id": "USR-1011",
       "name": "Lina Ahmed",
+      "nameAr": "لينا أحمد",
       "email": "lina.ahmed@example.com",
       "role": "moderator",
       "status": "active",
@@ -203,6 +219,7 @@
         {
           "id": "USR-1011-ENT-1",
           "entity": "CRM Workspace",
+          "entityAr": "مساحة عمل إدارة علاقات العملاء",
           "email": "lina.crm@example.com",
           "usageQueries": 2650,
           "lastActive": "4 hrs ago"
@@ -212,6 +229,7 @@
     {
       "id": "USR-1012",
       "name": "Omar Khaled",
+      "nameAr": "عمر خالد",
       "email": "omar.khaled@example.com",
       "role": "user",
       "status": "active",
@@ -221,6 +239,7 @@
         {
           "id": "USR-1012-ENT-1",
           "entity": "Support Queue Ops",
+          "entityAr": "عمليات طابور الدعم",
           "email": "omar.support@example.com",
           "usageQueries": 530,
           "lastActive": "6 hrs ago"

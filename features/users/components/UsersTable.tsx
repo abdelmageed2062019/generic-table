@@ -14,6 +14,7 @@ import { UserRowActions } from "./UserRowActions";
 import { UserExpandedRow } from "./UserExpandedRow";
 import { useUsers } from "../hooks/useUsers";
 import type { User, UserRole, UserStatus } from "../types/user.types";
+import { formatLongDate } from "@/lib/formatters";
 
 const statusVariant: Record<UserStatus, "default" | "secondary" | "destructive"> = {
      active: "default",
@@ -116,7 +117,7 @@ export function UsersTable() {
                ),
                cell: ({ row }) => (
                     <span className="text-sm text-muted-foreground">
-                         {new Date(row.original.createdAt).toLocaleDateString()}
+                         {formatLongDate(row.original.createdAt, locale)}
                     </span>
                ),
           },
@@ -139,14 +140,14 @@ export function UsersTable() {
                               (table.getIsSomePageRowsSelected() && "indeterminate")
                          }
                          onCheckedChange={(val) => table.toggleAllPageRowsSelected(!!val)}
-                         aria-label="Select all"
+                         aria-label={tCommon("selectAll")}
                     />
                ),
                cell: ({ row }) => (
                     <Checkbox
                          checked={row.getIsSelected()}
                          onCheckedChange={(val) => row.toggleSelected(!!val)}
-                         aria-label="Select row"
+                         aria-label={tCommon("selectRow")}
                     />
                ),
                enableSorting: false,
@@ -166,7 +167,7 @@ export function UsersTable() {
                          size="sm"
                          className="h-8 w-8 p-0"
                          onClick={() => row.toggleExpanded()}
-                         aria-label="Toggle expanded row"
+                         aria-label={tCommon("toggleExpandedRow")}
                     >
                          {row.getIsExpanded() ? (
                               <ChevronDown className="h-4 w-4" />
