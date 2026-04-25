@@ -187,26 +187,6 @@
       ]
     },
     {
-      "id": "USR-1010",
-      "name": "Chris Evans",
-      "nameAr": "كريس إيفانز",
-      "email": "chris.evans@example.com",
-      "role": "admin",
-      "status": "inactive",
-      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=USR-1010",
-      "createdAt": "2024-06-11T09:00:00.000Z",
-      "linkedEntities": [
-        {
-          "id": "USR-1010-ENT-1",
-          "entity": "Billing Dashboard",
-          "entityAr": "لوحة معلومات الفوترة",
-          "email": "chris.billing@example.com",
-          "usageQueries": 740,
-          "lastActive": "3 days ago"
-        }
-      ]
-    },
-    {
       "id": "USR-1011",
       "name": "Lina Ahmed",
       "nameAr": "لينا أحمد",
@@ -254,6 +234,16 @@
       "status": "active",
       "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=USR-1013",
       "createdAt": "2026-04-25T11:55:44.178Z",
+      "linkedEntities": []
+    },
+    {
+      "id": "USR-1014",
+      "name": "Maximillia Steuber",
+      "email": "sophia.davis@example.com",
+      "role": "admin",
+      "status": "inactive",
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=USR-1014",
+      "createdAt": "2026-04-25T12:31:11.074Z",
       "linkedEntities": []
     }
   ]

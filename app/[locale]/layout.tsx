@@ -8,6 +8,7 @@ import { I18nProvider } from "../../providers/I18nProvider";
 import { LanguageSwitcher } from "../../i18n/LanguageSwitcher";
 import { HtmlLangDirSync } from "../../i18n/HtmlLangDirSync";
 import { DirectionProvider } from "../../components/ui/direction";
+import { Toaster } from "../../components/ui/sonner";
 
 type Props = {
      children: React.ReactNode;
@@ -50,6 +51,7 @@ export default async function LocaleLayout({ children, params }: Props) {
                               </div>
                          </header>
                          <main className="container mx-auto px-4 py-8">{children}</main>
+                         <Toaster dir={dir} position={dir === "rtl" ? "top-left" : "top-right"} />
                     </DirectionProvider>
                </I18nProvider>
           </QueryProvider>

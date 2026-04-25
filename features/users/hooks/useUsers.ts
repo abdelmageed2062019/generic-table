@@ -1,4 +1,8 @@
+"use client";
+
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useTranslations } from "next-intl";
+import { toast } from "sonner";
 import { fetchUsers, deleteUser, createUser } from "../api/users.api";
 import type { CreateUserInput, UsersParams } from "../types/user.types";
 
@@ -20,11 +24,16 @@ export function useUsers(params: UsersParams) {
 // Deletes a user and invalidates the cache so the table refreshes
 export function useDeleteUser() {
      const queryClient = useQueryClient();
+     const t = useTranslations("users.toasts");
 
      return useMutation({
           mutationFn: (id: string) => deleteUser(id),
           onSuccess: () => {
                queryClient.invalidateQueries({ queryKey: usersKeys.all });
+               toast.success(t("userDeleted"));
+          },
+          onError: () => {
+               toast.error(t("deleteError"));
           },
      });
 }
@@ -32,11 +41,16 @@ export function useDeleteUser() {
 // Creates a user and invalidates the cache so the table refreshes    
 export function useCreateUser() {
      const queryClient = useQueryClient();
+     const t = useTranslations("users.toasts");
 
      return useMutation({
           mutationFn: (payload: CreateUserInput) => createUser(payload),
           onSuccess: () => {
                queryClient.invalidateQueries({ queryKey: usersKeys.all });
+               toast.success(t("userCreated"));
+          },
+          onError: () => {
+               toast.error(t("createError"));
           },
      });
 }

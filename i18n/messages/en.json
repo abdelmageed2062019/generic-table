@@ -65,6 +65,12 @@
       "editUser": "Edit user",
       "deleteUser": "Delete user",
       "viewProfile": "View profile"
+    },
+    "toasts": {
+      "userCreated": "User created",
+      "createError": "Failed to create user",
+      "userDeleted": "User deleted",
+      "deleteError": "Failed to delete user"
     }
   },
   "orders": {

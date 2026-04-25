@@ -65,6 +65,12 @@
       "editUser": "تعديل المستخدم",
       "deleteUser": "حذف المستخدم",
       "viewProfile": "عرض الملف الشخصي"
+    },
+    "toasts": {
+      "userCreated": "تم إنشاء المستخدم",
+      "createError": "فشل إنشاء المستخدم",
+      "userDeleted": "تم حذف المستخدم",
+      "deleteError": "فشل حذف المستخدم"
     }
   },
   "orders": {
