@@ -6,5 +6,5 @@ type Props = {
 
 export default async function LocaleIndexPage({ params }: Props) {
      const { locale } = await params;
-     redirect(`/${locale}/users`);
+     redirect(`/${locale}/users-selection`);
 }

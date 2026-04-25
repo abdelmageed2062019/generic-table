@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { ColumnDef, RowSelectionState, ExpandedState } from "@tanstack/react-table";
 import { useLocale, useTranslations } from "next-intl";
+import { usePathname, useRouter } from "next/navigation";
 import { ChevronDown, ChevronRight, Download, Plus } from "lucide-react";
 import { Popover as PopoverPrimitive } from "radix-ui";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -38,9 +39,11 @@ export function UsersTable() {
      const direction = useDirection();
      const t = useTranslations("users");
      const tCommon = useTranslations("common");
-     const [tableMode, setTableMode] = useState<"selection" | "expandable">(
-          "selection"
-     );
+     const router = useRouter();
+     const pathname = usePathname();
+     const tableMode: "selection" | "expandable" = pathname?.includes("/users-expandable")
+          ? "expandable"
+          : "selection";
 
      const [pagination, setPagination] = useState({ pageIndex: 0, pageSize: 10 });
      const [search, setSearch] = useState("");
@@ -247,12 +250,9 @@ export function UsersTable() {
                     value={tableMode}
                     onValueChange={(value) => {
                          const nextMode = value as "selection" | "expandable";
-                         setTableMode(nextMode);
-                         if (nextMode === "selection") {
-                              setExpanded({});
-                         } else {
-                              setRowSelection({});
-                         }
+                         router.push(
+                              `/${locale}/${nextMode === "selection" ? "users-selection" : "users-expandable"}`
+                         );
                     }}
                >
                     <TabsList>

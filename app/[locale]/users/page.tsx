@@ -1,5 +1,10 @@
-import { UsersTable } from "@/features/users";
+import { redirect } from "next/navigation";
 
-export default function UsersPage() {
-     return <UsersTable />;
+type Props = {
+     params: Promise<{ locale: string }>;
+};
+
+export default async function UsersPage({ params }: Props) {
+     const { locale } = await params;
+     redirect(`/${locale}/users-selection`);
 }

@@ -1,36 +1,51 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Generic Table (Next.js)
 
-## Getting Started
+## How to Run
 
-First, run the development server:
+Requirements:
+
+- Node.js 18+
+
+Install and start:
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- http://localhost:3000/en/users-selection
+- http://localhost:3000/en/users-expandable
+- http://localhost:3000/ar/users-selection
+- http://localhost:3000/ar/users-expandable
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Other useful scripts:
 
-## Learn More
+```bash
+npm run lint
+npm run build
+```
 
-To learn more about Next.js, take a look at the following resources:
+## Approach
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- Next.js App Router with locale segment (`/en`, `/ar`) using `next-intl`.
+- RTL/LTR support via a direction provider; UI components use `dir` and direction-aware alignment (`text-start`, etc.).
+- Users table is built on TanStack Table + a reusable `DataTable` wrapper (sorting, pagination, selection, expandable rows).
+- Data fetching and mutations use React Query:
+  - Query keys are centralized to keep invalidation consistent.
+  - Create/Delete invalidate the users cache so the table refreshes.
+- Local data is stored in a JSON file via `lowdb` (`data/db.json`) and served through Next.js API routes under `/api/users`.
+- CSV export fetches the currently-filtered users and generates a UTF-8 CSV (with BOM for correct Excel/Arabic support).
+- Sonner is used for toast notifications on create/delete success and error.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Mock Data Source
 
-## Deploy on Vercel
+- File-backed mock database: [data/db.json](./data/db.json)
+- This file is the source of truth for `/api/users` (read/write via `lowdb`).
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Assumptions / Trade-offs
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- CSV export fetches a large page size (effectively “all matching rows”) to avoid implementing server-side streaming in this exercise.
+- The “database” is file-backed (`lowdb`) for simplicity and portability; it’s not intended for concurrent production workloads.
+- Toast messages are intentionally short and generic; detailed error messaging could be added by surfacing API error details.
