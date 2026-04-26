@@ -25,6 +25,14 @@ export default async function RootLayout({
 }) {
      return (
           <html suppressHydrationWarning>
+               <head>
+                    <script
+                         dangerouslySetInnerHTML={{
+                              __html:
+                                   "(function(){try{var t=localStorage.getItem('theme');var p=window.matchMedia('(prefers-color-scheme: dark)').matches;var d=t==='dark'||(!t&&p);var c=document.documentElement.classList;c.toggle('dark',d);document.documentElement.style.colorScheme=d?'dark':'light';}catch(e){}})();",
+                         }}
+                    />
+               </head>
                <body className={`${roboto.variable} ${cairo.variable}`}>{children}</body>
           </html>
      );

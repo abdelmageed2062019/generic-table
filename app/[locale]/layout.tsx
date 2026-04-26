@@ -10,6 +10,7 @@ import { HtmlLangDirSync } from "../../i18n/HtmlLangDirSync";
 import { DirectionProvider } from "../../components/ui/direction";
 import { Toaster } from "../../components/ui/sonner";
 import { UsersModeNav } from "../../components/UsersModeNav";
+import { ThemeToggle } from "../../components/ui/theme-toggle";
 
 type Props = {
      children: React.ReactNode;
@@ -38,7 +39,7 @@ export default async function LocaleLayout({ children, params }: Props) {
                     <DirectionProvider
                          direction={dir}
                          lang={locale}
-                         className="min-h-screen bg-gray-100"
+                         className="min-h-screen bg-background text-foreground"
                     >
                          <header className="border-b bg-card">
                               <div className="container mx-auto flex h-14 items-center gap-4 px-4">
@@ -54,7 +55,10 @@ export default async function LocaleLayout({ children, params }: Props) {
                                    </div>
 
                                    <div className="flex items-center justify-end">
-                                        <LanguageSwitcher />
+                                        <div className="flex items-center gap-2">
+                                             <ThemeToggle />
+                                             <LanguageSwitcher />
+                                        </div>
                                    </div>
                               </div>
                          </header>
