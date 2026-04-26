@@ -30,6 +30,7 @@ export function DataTablePagination<TData>({
 }: DataTablePaginationProps<TData>) {
      const locale = useLocale();
      const t = useTranslations("pagination");
+     const contentDir = locale === "ar" ? "rtl" : "ltr";
 
      const { pageIndex, pageSize } = table.getState().pagination;
      const totalRows = table.getFilteredRowModel().rows.length;
@@ -42,8 +43,11 @@ export function DataTablePagination<TData>({
      const to = totalRows === 0 ? 0 : Math.min((pageIndex + 1) * pageSize, totalRows);
 
      return (
-          <div className="flex flex-col gap-3 px-4 py-3 sm:flex-row sm:items-center sm:justify-between">
-               <div className="text-sm text-muted-foreground">
+          <div
+               dir="ltr"
+               className="flex flex-col gap-3 px-4 py-3 sm:flex-row sm:items-center sm:justify-between"
+          >
+               <div dir={contentDir} className="text-sm text-muted-foreground">
                     {t("showing", {
                          from: formatNumber(from),
                          to: formatNumber(to),
@@ -51,10 +55,13 @@ export function DataTablePagination<TData>({
                     })}
                </div>
 
-               <div className="flex items-center gap-6">
+               <div dir="ltr" className="flex items-center gap-6">
                     {/* Rows per page */}
                     <div className="flex items-center gap-2">
-                         <span className="text-sm text-muted-foreground whitespace-nowrap">
+                         <span
+                              dir={contentDir}
+                              className="text-sm text-muted-foreground whitespace-nowrap"
+                         >
                               {t("rowsPerPage")}
                          </span>
                          <Select
@@ -77,13 +84,13 @@ export function DataTablePagination<TData>({
                     </div>
 
                     {/* Page indicator */}
-                    <div className="text-sm text-muted-foreground whitespace-nowrap">
+                    <div dir={contentDir} className="text-sm text-muted-foreground whitespace-nowrap">
                          {t("page")} <bdi>{formatNumber(pageIndex + 1)}</bdi> {t("of")}{" "}
                          <bdi>{formatNumber(pageCount)}</bdi>
                     </div>
 
                     {/* Navigation buttons */}
-                    <div className="flex items-center gap-1">
+                    <div dir="ltr" className="flex items-center gap-1">
                          <Button
                               variant="outline"
                               size="icon"
