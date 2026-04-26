@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useLayoutEffect, useState } from "react";
 import { useTranslations } from "next-intl";
 import { Moon, Sun } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -15,12 +15,26 @@ function applyTheme(theme: Theme) {
      localStorage.setItem("theme", theme);
 }
 
+function getInitialTheme(): Theme {
+     const saved = localStorage.getItem("theme");
+     if (saved === "dark" || saved === "light") return saved;
+     return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+}
+
 export function ThemeToggle() {
      const t = useTranslations("common");
      const [theme, setTheme] = useState<Theme>(() => {
-          if (typeof document === "undefined") return "light";
-          return document.documentElement.classList.contains("dark") ? "dark" : "light";
+          if (typeof window === "undefined") return "light";
+          try {
+               return getInitialTheme();
+          } catch {
+               return "light";
+          }
      });
+
+     useLayoutEffect(() => {
+          applyTheme(theme);
+     }, [theme]);
 
      return (
           <Button

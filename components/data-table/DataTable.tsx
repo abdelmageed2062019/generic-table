@@ -1,5 +1,6 @@
 "use client";
 
+import { Fragment } from "react";
 import {
      ColumnDef,
      ExpandedState,
@@ -163,9 +164,8 @@ export function DataTable<TData>({
                               </TableRow>
                          ) : (
                               table.getRowModel().rows.map((row) => (
-                                   <>
+                                   <Fragment key={row.id}>
                                         <TableRow
-                                             key={row.id}
                                              data-state={row.getIsSelected() ? "selected" : undefined}
                                              className={row.getIsExpanded() ? "border-b-0" : undefined}
                                         >
@@ -180,13 +180,13 @@ export function DataTable<TData>({
                                         </TableRow>
 
                                         {row.getIsExpanded() && renderExpandedRow && (
-                                             <TableRow key={`${row.id}-expanded`}>
+                                             <TableRow>
                                                   <TableCell colSpan={columns.length} className="p-0">
                                                        {renderExpandedRow(row.original)}
                                                   </TableCell>
                                              </TableRow>
                                         )}
-                                   </>
+                                   </Fragment>
                               ))
                          )}
                     </TableBody>
