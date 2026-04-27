@@ -77,7 +77,7 @@ export function UsersFilters({
      };
 
      return (
-          <div className="flex flex-wrap items-center justify-end gap-2">
+          <div className="flex w-full flex-wrap items-center justify-start gap-2 sm:justify-end">
                {/* Role filter */}
                <Select
                     value={role || "all"}
@@ -85,7 +85,7 @@ export function UsersFilters({
                          onRoleChange(val === "all" ? "" : (val as UserRole))
                     }
                >
-                    <SelectTrigger className="h-9 w-[140px] bg-background">
+                    <SelectTrigger size="sm" className="w-[120px] bg-background">
                          <SelectValue placeholder={t("role")} />
                     </SelectTrigger>
                     <SelectContent>
@@ -103,7 +103,7 @@ export function UsersFilters({
                          onStatusChange(val === "all" ? "" : (val as UserStatus))
                     }
                >
-                    <SelectTrigger className="h-9 w-[140px] bg-background">
+                    <SelectTrigger size="sm" className="w-[120px] bg-background">
                          <SelectValue placeholder={t("status")} />
                     </SelectTrigger>
                     <SelectContent>
@@ -120,7 +120,7 @@ export function UsersFilters({
                               variant="outline"
                               data-empty={!selectedDate}
                               dir={direction}
-                              className="h-9 w-[190px] justify-between bg-background text-start font-normal data-[empty=true]:text-muted-foreground"
+                              className="h-8 w-[170px] justify-between bg-background text-start text-[0.8rem] font-normal data-[empty=true]:text-muted-foreground"
                          >
                               <CalendarIcon className="h-4 w-4 opacity-70" />
                               {selectedDate ? (
@@ -228,7 +228,7 @@ export function UsersFilters({
 
                {/* Reset button — only shows when a filter is active */}
                {hasActiveFilters && (
-                    <Button variant="ghost" size="sm" onClick={onReset}>
+                    <Button variant="ghost" size="xs" onClick={onReset}>
                          {tCommon("reset")}
                     </Button>
                )}

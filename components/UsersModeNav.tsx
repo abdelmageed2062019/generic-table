@@ -13,10 +13,10 @@ export function UsersModeNav({ className }: { className?: string }) {
           : "selection";
 
      const linkClassName =
-          "text-muted-foreground inline-flex h-14 items-center justify-center border-b-2 border-transparent px-2 text-sm font-medium whitespace-nowrap transition-[color,border-color] hover:text-foreground aria-[current=page]:border-sky-400 aria-[current=page]:text-foreground";
+          "text-muted-foreground inline-flex h-12 sm:h-14 items-center justify-center border-b-2 border-transparent px-1.5 sm:px-2 text-xs sm:text-sm font-medium whitespace-nowrap transition-[color,border-color] hover:text-foreground aria-[current=page]:border-sky-400 aria-[current=page]:text-foreground";
 
      return (
-          <nav className={cn("flex h-14 items-stretch gap-6", className)}>
+          <nav className={cn("flex h-12 sm:h-14 items-stretch gap-3 sm:gap-6", className)}>
                <Link
                     href="/users-selection"
                     aria-current={currentMode === "selection" ? "page" : undefined}

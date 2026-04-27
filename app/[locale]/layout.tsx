@@ -42,8 +42,8 @@ export default async function LocaleLayout({ children, params }: Props) {
                          className="min-h-screen bg-background text-foreground"
                     >
                          <header className="border-b bg-card">
-                              <div className="container mx-auto flex h-14 items-center gap-4 px-4">
-                                   <div className="flex items-center gap-6">
+                              <div className="container mx-auto flex h-12 sm:h-14 items-center gap-3 sm:gap-4 px-4">
+                                   <div className="flex items-center gap-4 sm:gap-6">
                                         <Link href={`/${locale}`} className="inline-flex items-center">
                                              <Database className="h-5 w-5" aria-hidden />
                                              <span className="sr-only">DataApp</span>

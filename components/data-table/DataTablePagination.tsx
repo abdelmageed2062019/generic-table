@@ -45,9 +45,9 @@ export function DataTablePagination<TData>({
      return (
           <div
                dir="ltr"
-               className="flex flex-col gap-3 px-4 py-3 sm:flex-row sm:items-center sm:justify-between"
+               className="flex flex-col gap-2 px-3 py-2 sm:flex-row sm:items-center sm:justify-between sm:gap-3 sm:px-4 sm:py-3"
           >
-               <div dir={contentDir} className="text-sm text-muted-foreground">
+               <div dir={contentDir} className="text-xs sm:text-sm text-muted-foreground">
                     {t("showing", {
                          from: formatNumber(from),
                          to: formatNumber(to),
@@ -55,12 +55,12 @@ export function DataTablePagination<TData>({
                     })}
                </div>
 
-               <div dir="ltr" className="flex items-center gap-6">
+               <div dir="ltr" className="flex items-center gap-3 sm:gap-6">
                     {/* Rows per page */}
                     <div className="flex items-center gap-2">
                          <span
                               dir={contentDir}
-                              className="text-sm text-muted-foreground whitespace-nowrap"
+                              className="text-xs sm:text-sm text-muted-foreground whitespace-nowrap"
                          >
                               {t("rowsPerPage")}
                          </span>
@@ -70,12 +70,22 @@ export function DataTablePagination<TData>({
                                    table.setPageSize(Number(val));
                               }}
                          >
-                              <SelectTrigger className="w-[70px]">
+                              <SelectTrigger
+                                   size="sm"
+                                   className="h-7 w-[60px] px-2 text-xs leading-none tabular-nums sm:h-8 sm:w-[64px] sm:px-3 sm:text-sm [&_[data-slot=select-value]]:justify-center"
+                              >
                                    <SelectValue />
                               </SelectTrigger>
-                              <SelectContent side="top">
+                              <SelectContent
+                                   side="top"
+                                   className="min-w-[64px] text-xs [&_[data-slot=select-item]]:py-1"
+                              >
                                    {pageSizeOptions.map((size) => (
-                                        <SelectItem key={size} value={String(size)}>
+                                        <SelectItem
+                                             key={size}
+                                             value={String(size)}
+                                             className="text-xs leading-none"
+                                        >
                                              {formatNumber(size)}
                                         </SelectItem>
                                    ))}
@@ -84,7 +94,10 @@ export function DataTablePagination<TData>({
                     </div>
 
                     {/* Page indicator */}
-                    <div dir={contentDir} className="text-sm text-muted-foreground whitespace-nowrap">
+                    <div
+                         dir={contentDir}
+                         className="text-xs sm:text-sm text-muted-foreground whitespace-nowrap"
+                    >
                          {t("page")} <bdi>{formatNumber(pageIndex + 1)}</bdi> {t("of")}{" "}
                          <bdi>{formatNumber(pageCount)}</bdi>
                     </div>
@@ -94,42 +107,42 @@ export function DataTablePagination<TData>({
                          <Button
                               variant="outline"
                               size="icon"
-                              className="h-8 w-8"
+                              className="h-7 w-7 sm:h-8 sm:w-8"
                               onClick={() => table.setPageIndex(0)}
                               disabled={!table.getCanPreviousPage()}
                               title={t("first")}
                          >
-                              <ChevronsLeft className="h-4 w-4" />
+                              <ChevronsLeft className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
                          </Button>
                          <Button
                               variant="outline"
                               size="icon"
-                              className="h-8 w-8"
+                              className="h-7 w-7 sm:h-8 sm:w-8"
                               onClick={() => table.previousPage()}
                               disabled={!table.getCanPreviousPage()}
                               title={t("previous")}
                          >
-                              <ChevronLeft className="h-4 w-4" />
+                              <ChevronLeft className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
                          </Button>
                          <Button
                               variant="outline"
                               size="icon"
-                              className="h-8 w-8"
+                              className="h-7 w-7 sm:h-8 sm:w-8"
                               onClick={() => table.nextPage()}
                               disabled={!table.getCanNextPage()}
                               title={t("next")}
                          >
-                              <ChevronRight className="h-4 w-4" />
+                              <ChevronRight className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
                          </Button>
                          <Button
                               variant="outline"
                               size="icon"
-                              className="h-8 w-8"
+                              className="h-7 w-7 sm:h-8 sm:w-8"
                               onClick={() => table.setPageIndex(pageCount - 1)}
                               disabled={!table.getCanNextPage()}
                               title={t("last")}
                          >
-                              <ChevronsRight className="h-4 w-4" />
+                              <ChevronsRight className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
                          </Button>
                     </div>
                </div>

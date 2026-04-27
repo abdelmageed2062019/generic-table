@@ -39,8 +39,8 @@ export function ThemeToggle() {
      return (
           <Button
                variant="outline"
-               size="sm"
-               className="gap-2"
+               size="icon-xs"
+               className="sm:size-7"
                onClick={() => {
                     const nextTheme = theme === "dark" ? "light" : "dark";
                     applyTheme(nextTheme);
@@ -49,9 +49,9 @@ export function ThemeToggle() {
                aria-label={t("toggleTheme")}
           >
                {theme === "dark" ? (
-                    <Sun className="h-4 w-4" />
+                    <Sun className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
                ) : (
-                    <Moon className="h-4 w-4" />
+                    <Moon className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
                )}
                <span className="sr-only">{t("toggleTheme")}</span>
           </Button>
